@@ -65,3 +65,36 @@
 **Decision**: Default bilingual locale **`hu`** on first visit (per spec assumptions).
 
 **Rationale**: Hungarian book catalog is primary commerce language; aligns with target market inference from spec.
+
+## R9: Site-wide age gate (v2, 2026-06-08)
+
+**Decision**: Mount **`AgeGateGuard`** once in **`App.tsx`**, wrapping **`RouterProvider`**, blocking all routes until `isAgeVerified()`. Remove per-route guards on `/books`.
+
+**Rationale**: Spec FR-008 requires every route blocked before interactable content; single guard avoids bypass via `/`, `/about`, or deep links.
+
+**Alternatives considered**:
+
+| Alternative | Rejected because |
+|-------------|------------------|
+| Keep route-level guards only | Violates FR-008; generic pages remain reachable |
+| Server middleware | No server in static SPA; constitution static-first |
+
+## R10: Age-gate language (v2, 2026-06-08)
+
+**Decision**: **`detectBrowserLocale()`** maps `navigator.language` → `en` | `hu` (default `hu` if neither). Gate copy from `src/content/{en,hu}/ageGate.ts`. **No switcher on modal.** On confirm, if `bookstore_locale` unset, persist detected locale (FR-008b).
+
+**Rationale**: Clarification session 2026-06-08; matches reference overlay UX with localized strings without duplicating site switcher on gate.
+
+**Alternatives considered**:
+
+| Alternative | Rejected because |
+|-------------|------------------|
+| EN/HU switcher on modal | User chose browser auto-detect |
+| Geolocation API | Privacy/heavier; browser locale sufficient for EN/HU |
+| Always Hungarian gate | Fails bilingual gate requirement |
+
+## R11: Decline and dismiss (v2, 2026-06-08)
+
+**Decision**: Decline, **Escape**, and **overlay click** set UI state to **`declined`** (not persisted). Show localized decline message + **retry** button returning to confirm/decline prompt. No `Navigate` to `/` bypass.
+
+**Rationale**: FR-009 full lockout with retry; mis-clicks recoverable without opening site content.

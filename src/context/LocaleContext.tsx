@@ -2,6 +2,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactElement,
@@ -18,7 +19,7 @@ import { contactHu } from "@/content/hu/contact";
 import { landingHu } from "@/content/hu/landing";
 import { legalHu } from "@/content/hu/legal";
 import { booksHu } from "@/content/hu/books";
-import { readLocale, toggleLocale as toggleStored, writeLocale } from "@/lib/locale";
+import { LOCALE_CHANGE_EVENT, readLocale, toggleLocale as toggleStored, writeLocale } from "@/lib/locale";
 import type { Locale } from "@/lib/types";
 
 type LocaleContent = {
@@ -63,6 +64,12 @@ export const LocaleProvider = ({
   children: ReactNode;
 }): ReactElement => {
   const [locale, setLocaleState] = useState<Locale>(() => readLocale());
+
+  useEffect(() => {
+    const syncLocale = (): void => setLocaleState(readLocale());
+    window.addEventListener(LOCALE_CHANGE_EVENT, syncLocale);
+    return () => window.removeEventListener(LOCALE_CHANGE_EVENT, syncLocale);
+  }, []);
 
   const setLocale = useCallback((next: Locale) => {
     writeLocale(next);

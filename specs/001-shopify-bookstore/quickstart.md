@@ -53,11 +53,14 @@ Restart `npm run dev` after changing `.env`.
 
 | Story | Check | Done |
 |-------|--------|------|
-| Age gate | Open `/books` → modal → accept → catalog loads | [x] |
-| Decline age | Decline → redirect off `/books`; `/` still works | [x] |
-| Language | On `/`, switch EN/HU → copy changes | [x] |
+| Age gate | Open `/` or `/books` unverified → modal → accept → any route loads | [x] |
+| Decline age | Decline (or Escape) → blocked message + retry; no page content until confirm | [x] |
+| Age bypass | Clear storage; every direct URL shows gate; 0 content bypass | [x] |
+| Age gate locale | Browser `en` → EN gate copy; `hu` → HU copy | [x] |
+| Language | After confirm, on `/`, switch EN/HU → copy changes | [x] |
 | Books HU only | `/books` has no language switcher | [x] |
 | Detail + buy | Open book → buy physical/ebook → Shopify checkout | [x] |
+| Price parity | On book detail, note displayed HUF price → buy → Shopify checkout line item matches (same amount/currency) | [ ] |
 | Contact | Submit valid form → Formspree 200 → confirmation | [x] |
 | Legal | `/legal/privacy` in EN and HU | [x] |
 | Featured book | `/` featured link opens real Shopify book (not mock handle) | [x] |

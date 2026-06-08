@@ -11,16 +11,19 @@ description: "Task list for Shopify Bookstore Website"
 
 **Organization**: Tasks grouped by user story (spec.md priorities). Setup and Foundational phases block all stories.
 
-## Implementation status (2026-06-04)
+## Implementation status (2026-06-08)
 
 | Status | Count |
 |--------|-------|
-| Completed | 67 |
-| Open | 0 |
+| v1 Completed | 67 |
+| v2 Open | 0 |
+| v2 Completed | 11 |
 
-**All tasks complete** (signed off 2026-06-04).
+**v1 complete** (signed off 2026-06-04). **v2 age gate complete** (T068–T078, 2026-06-08).
 
-**Deviations (documented in `plan.md` Complexity Tracking)**: raw Storefront `fetch` (T001); `createBrowserRouter` (T009); `LocaleContext` (T025); modal in `AgeGateGuard` (T014); no `LegalPage.module.css` (T059); Formspree for contact (T056).
+**Deviations (documented in `plan.md` Complexity Tracking)**: Formspree for contact (T056); `LocaleContext` instead of hook-only locale (T025).
+
+**Spec sync (2026-06-08)**: Task descriptions T001, T009, T014, T059 updated to match shipped v1; see `/speckit-analyze` remediation on `main`.
 
 ### Keeping Spec Kit in sync
 
@@ -44,7 +47,7 @@ Commands: `/speckit-analyze` (consistency), `/speckit-git-commit` (save artifact
 
 **Purpose**: Initialize Vite + React project per plan.md
 
-- [X] T001 Create `package.json` with React 19, Vite, TypeScript, react-router-dom, Vitest, `@shopify/storefront-api-client` in `/package.json`
+- [X] T001 Create `package.json` with React 19, Vite, TypeScript, react-router-dom, Vitest (no Shopify SDK—Storefront GraphQL via raw `fetch` in `src/lib/shopify/client.ts`) in `/package.json`
 - [X] T002 Add `vite.config.ts`, `tsconfig.json`, `vitest.config.ts` at repo root
 - [X] T003 Add `index.html` and `src/main.tsx` entry point in `/src/main.tsx`
 - [X] T004 Add `vercel.json` SPA rewrites and `.env.example` per `quickstart.md`
@@ -61,12 +64,12 @@ Commands: `/speckit-analyze` (consistency), `/speckit-git-commit` (save artifact
 **⚠️ CRITICAL**: No user story work until this phase is complete
 
 - [X] T008 Create route table in `src/routes/index.tsx` per `contracts/routes-and-guards.md`
-- [X] T009 Create `src/App.tsx` with `BrowserRouter` and route outlet
+- [X] T009 Create `src/App.tsx` with `RouterProvider` + `createBrowserRouter` and route outlet
 - [X] T010 Create `src/components/layout/SiteLayout.tsx` and `SiteLayout.module.css`
 - [X] T011 Create `src/components/layout/PrimaryNav.tsx` and `PrimaryNav.module.css`
 - [X] T012 Create placeholder pages: `src/pages/NotFoundPage.tsx` and stubs for all routes in `src/pages/`
 - [X] T013 Wire `LocaleProvider` shell in `src/App.tsx` (implementation completed in US2)
-- [X] T014 Mount global `AgeGateModal` host in `src/App.tsx` (logic completed in US1)
+- [X] T014 Mount `AgeGateGuard` on gated routes in `src/routes/index.tsx` (modal host; not a global `App.tsx` overlay)
 - [X] T015 Add route meta flags (`bilingual`, `ageGated`) in `src/routes/index.tsx`
 
 **Checkpoint**: All routes resolve; layout renders; `npm run dev` shows nav skeleton
@@ -227,7 +230,7 @@ Commands: `/speckit-analyze` (consistency), `/speckit-git-commit` (save artifact
 ### Implementation for User Story 8
 
 - [X] T058 [P] [US8] Add legal content modules in `src/content/en/legal.ts` and `src/content/hu/legal.ts`
-- [X] T059 [US8] Implement `src/pages/LegalPage.tsx` and `LegalPage.module.css` (param: policy type)
+- [X] T059 [US8] Implement `src/pages/LegalPage.tsx` (param: policy type; scoped styles via shared layout tokens—no dedicated `LegalPage.module.css`)
 - [X] T060 [US8] Wire `/legal/privacy`, `/legal/terms`, `/legal/cookies` in `src/routes/index.tsx`
 - [X] T061 [US8] Add legal links to footer or nav in `PrimaryNav.tsx`
 
@@ -248,6 +251,35 @@ Commands: `/speckit-analyze` (consistency), `/speckit-git-commit` (save artifact
 
 ---
 
+## Phase 12: Age Gate v2 — Site-Wide Bilingual Gate (2026-06-08)
+
+**Purpose**: Implement spec clarifications FR-008–FR-009, FR-008a/b; [contracts/age-gate.md](./contracts/age-gate.md)
+
+**Goal**: Site-wide modal on all routes; EN/HU via browser locale; decline + retry; locale seed on confirm
+
+**Independent Test**: Clear `localStorage` → visit `/` → gate in browser locale → confirm → site loads → decline path shows retry with no route access
+
+### Tests for Age Gate v2
+
+- [X] T068 [P] [US1] Write `tests/unit/detectBrowserLocale.test.ts` per `contracts/age-gate.md`
+- [X] T069 [P] [US1] Extend `tests/unit/ageGate.test.ts` — confirm seeds `bookstore_locale` when unset
+- [X] T070 [P] [US1] Write `tests/unit/ageGateGuard.test.tsx` — block outlet, decline+retry, verified pass-through
+
+### Implementation for Age Gate v2
+
+- [X] T071 [P] [US1] Add `src/lib/detectBrowserLocale.ts` mapping `navigator.language` → `en` | `hu`
+- [X] T072 [P] [US1] Add `src/content/en/ageGate.ts` and `src/content/hu/ageGate.ts` (title, body, buttons, decline, retry)
+- [X] T073 [US1] Refactor `src/components/AgeGateModal/AgeGateModal.tsx` — locale prop, prompt/declined states, overlay click → decline
+- [X] T074 [US1] Update `src/lib/ageGate.ts` — `confirmAgeWithLocale(locale)` seeds locale when absent
+- [X] T075 [US1] Refactor `src/routes/AgeGateGuard.tsx` — declined+retry state machine; remove `Navigate` bypass
+- [X] T076 [US1] Move `AgeGateGuard` to wrap `RouterProvider` in `src/App.tsx`; remove guards from `src/routes/index.tsx`
+- [X] T077 [US1] Update `AgeGateModal.module.css` for site-wide overlay (dimmed backdrop per reference UX)
+- [X] T078 [US1] Run quickstart §3 age-gate rows + `npm test`; mark smoke `[x]` when signed off
+
+**Checkpoint**: SC-002 all routes; US1 scenarios 1–5; FR-008a/b/009 satisfied
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
@@ -256,6 +288,7 @@ Commands: `/speckit-analyze` (consistency), `/speckit-git-commit` (save artifact
 - **US4–US5 (Phases 6–7)** require US1 (age gate) + Shopify env; US4 before US5
 - **US6–US8 (Phases 8–10)** require US2 (locale); can run in parallel after Phase 4
 - **Polish (Phase 11)** after desired stories complete
+- **Age gate v2 (Phase 12)** — independent of US3–US8; can run on `main` after v1 merge
 
 ### User Story Dependencies
 
@@ -331,4 +364,4 @@ src/components/BookCard/BookCard.tsx
 - **T066**: Mark `[X]` after every row in `quickstart.md` §3 smoke table is checked.
 - ISBN: not in v1; use Shopify variant barcode only if needed later
 - Commit plan artifacts before implement if still untracked (`/speckit-git-commit`)
-- Task count: **67** tasks | US1: 7 | US2: 7 | US3: 4 | US4: 9 | US5: 6 | US6: 3 | US7: 6 | US8: 4 | Setup: 7 | Foundational: 8 | Polish: 6
+- Task count: **78** tasks | v1: 67 done | v2: 11 done (T068–T078)

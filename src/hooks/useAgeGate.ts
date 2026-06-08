@@ -2,9 +2,11 @@ import { useCallback, useSyncExternalStore } from "react";
 import {
   clearAgeVerification,
   confirmAge,
+  confirmAgeWithLocale,
   isAgeVerified,
   readAgeVerification,
 } from "@/lib/ageGate";
+import type { Locale } from "@/lib/types";
 
 const subscribe = (onStoreChange: () => void): (() => void) => {
   window.addEventListener("storage", onStoreChange);
@@ -22,6 +24,7 @@ const notify = (): void => {
 export const useAgeGate = (): {
   verified: boolean;
   confirm: () => void;
+  confirmWithLocale: (locale: Locale) => void;
   clear: () => void;
 } => {
   const verified = useSyncExternalStore(
@@ -35,12 +38,17 @@ export const useAgeGate = (): {
     notify();
   }, []);
 
+  const confirmWithLocale = useCallback((locale: Locale) => {
+    confirmAgeWithLocale(locale);
+    notify();
+  }, []);
+
   const clear = useCallback(() => {
     clearAgeVerification();
     notify();
   }, []);
 
-  return { verified, confirm, clear };
+  return { verified, confirm, confirmWithLocale, clear };
 };
 
 export const useAgeVerificationRecord = () =>

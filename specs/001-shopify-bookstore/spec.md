@@ -4,9 +4,9 @@
 
 **Created**: 2026-05-28
 
-**Status**: Implemented (v1)
+**Status**: Implemented (v1 + v2 age gate)
 
-**Last verified**: 2026-06-04
+**Last verified**: 2026-06-08 (spec + v2 implementation)
 
 **Input**: User description: "I am building a website for selling physical and e-books with shopify integration, I want to have a landing page and books overview page and a book detail page and a contact page and an about page."
 
@@ -17,25 +17,36 @@
 - Q: Which pages are bilingual (English and Hungarian) vs single-language? → A: Bilingual EN/HU for landing, about, contact, and legal pages; books overview and book detail are Hungarian only.
 - Q: Is age verification required? → A: Yes — popup to confirm the visitor is 18 years or older before book shopping access.
 - Q: Which legal pages are in scope? → A: Standard legal set (privacy policy, terms & conditions, cookie policy) as bilingual generic pages, same language rules as other generic pages.
-- Q: What happens if a visitor declines age verification? → A: (Inferred) They cannot access books overview, book detail, or checkout; bilingual generic pages remain available.
+- Q: What happens if a visitor declines age verification? → A: Full site lockout — no routes accessible; visitor remains on a blocked decline state (superseded 2026-06-08; was: generic pages remain available).
 - Q: How is language chosen on bilingual pages? → A: (Inferred) Visitor-selectable EN/HU switcher on bilingual pages only; book pages display Hungarian with no switcher.
+- Q: Where does the age popup appear? → A: On every route — site-wide gate before any page content (superseded 2026-06-08; was: `/books` routes only).
+
+### Session 2026-06-08
+
+- Q: What routes require age verification? → A: All routes — a site-wide age gate blocks the entire site until the visitor confirms they are 18+.
+- Q: What happens when a visitor declines with a site-wide gate? → A: Full lockout — no pages are reachable; the visitor stays on a blocked state with decline messaging and may only leave the site (reference UX: site-wide overlay with **Igen** / **Nem** or EN equivalents; background not interactable).
+- Q: How is age-gate language (EN/HU) chosen? → A: Auto-detect from browser locale (e.g. `navigator.language`); Hungarian if neither English nor Hungarian is detected; no EN/HU switcher on the modal.
+- Q: After age confirm, should gate language seed site locale? → A: Yes — on confirm, persist detected gate locale as `bookstore_locale` when no locale is already stored; bilingual pages open in that language until the visitor switches.
+- Q: After decline, can the visitor retry confirmation? → A: Yes — decline shows a blocked message with a retry control that returns to the confirm/decline prompt; site remains inaccessible until they confirm.
+- Q: Do Escape or outside-click dismiss the age gate? → A: Same as decline — Escape and clicking outside enter the decline blocked state with retry; no silent dismiss.
 
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Confirm Age Before Shopping (Age Verification) (Priority: P1)
 
-A first-time visitor must confirm they are at least 18 years old before they can browse the book catalog, open book details, or start checkout.
+A first-time visitor must confirm they are at least 18 years old before they can access any part of the site, including landing, about, contact, legal, catalog, or checkout.
 
-**Why this priority**: Age gating is a legal and trust requirement that must run before any commerce journey.
+**Why this priority**: Age gating is a legal and trust requirement that must run before any site content is shown.
 
-**Independent Test**: Visit the site as a new visitor; confirm the age popup appears; verify that declining blocks book pages and checkout while generic pages remain reachable.
+**Independent Test**: Visit any route (e.g. `/`, `/about`, `/books`) as a new visitor; confirm the site-wide age modal appears; verify that confirming unlocks all routes and that declining leaves the visitor locked out with no page access.
 
 **Acceptance Scenarios**:
 
-1. **Given** a first-time visitor on any page, **When** they have not yet confirmed their age, **Then** an age-verification popup is shown explaining that they must be 18 or older to shop for books.
-2. **Given** the age-verification popup is shown, **When** the visitor confirms they are 18 or older, **Then** the popup closes and they can access books overview, book detail, and checkout flows.
-3. **Given** the age-verification popup is shown, **When** the visitor declines or dismisses without confirming, **Then** they cannot access books overview, book detail, or checkout, but may still view bilingual generic pages (landing, about, contact, legal).
-4. **Given** a visitor who previously confirmed their age, **When** they return in the same browser session, **Then** they are not asked again until the stored confirmation expires or is cleared.
+1. **Given** a first-time visitor on any route without prior confirmation, **When** the page loads, **Then** a site-wide age-verification modal is shown explaining that they must be 18 or older to enter the site.
+2. **Given** the age-verification modal is shown, **When** the visitor confirms they are 18 or older, **Then** the modal closes and they can access all routes (landing, about, contact, legal, books, checkout).
+3. **Given** the age-verification modal is shown, **When** the visitor declines or dismisses without confirming, **Then** they cannot access any route or site content—they see a decline-only blocked state with messaging and a retry control to return to the confirm/decline prompt.
+4. **Given** a visitor who previously confirmed their age, **When** they return before the stored confirmation expires or is cleared, **Then** they are not asked again.
+5. **Given** a first-time visitor whose browser locale is English, **When** the age gate loads, **Then** modal title, body, and buttons are shown in English; **Given** browser locale is Hungarian, **Then** they are shown in Hungarian.
 
 ---
 
@@ -52,7 +63,8 @@ A visitor reads landing, about, contact, and legal content in English or Hungari
 1. **Given** a visitor on a bilingual generic page, **When** the page loads, **Then** they can switch between English and Hungarian and see page content in the selected language.
 2. **Given** a visitor selects Hungarian on a generic page, **When** they navigate to another bilingual generic page, **Then** that page opens in Hungarian unless they change language again.
 3. **Given** a visitor on the books overview or a book detail page, **When** the page loads, **Then** all book-related labels and content are shown in Hungarian only and no language switcher is offered.
-4. **Given** a visitor on a Hungarian-only book page, **When** they navigate to a bilingual generic page, **Then** the generic page respects their last selected bilingual language or a sensible default (Hungarian).
+4. **Given** a visitor on a Hungarian-only book page, **When** they navigate to a bilingual generic page, **Then** the generic page respects their last selected bilingual language, the locale seeded at age confirm, or Hungarian as default.
+5. **Given** a first-time visitor who confirms age with an English browser locale and no stored locale preference, **When** the gate closes, **Then** bilingual pages load in English until they switch to Hungarian.
 
 ---
 
@@ -84,7 +96,7 @@ A visitor browses all available books in Hungarian, distinguishes physical copie
 
 1. **Given** a visitor who confirmed age, **When** they open the books overview, **Then** they see all sellable books with Hungarian labels and each book's title, cover image, format (physical, e-book, or both), and price.
 2. **Given** multiple books in the catalog, **When** a visitor selects a book, **Then** they are taken to that book's Hungarian detail page.
-3. **Given** a visitor who has not confirmed age, **When** they attempt to open the books overview, **Then** they are prompted to complete age verification first.
+3. **Given** a visitor who has not confirmed age, **When** they attempt to open any route, **Then** they are blocked by the site-wide age-verification modal.
 
 ---
 
@@ -160,9 +172,10 @@ A visitor reviews privacy, terms, and cookie information in English or Hungarian
 - What happens if a visitor submits the contact form with an invalid email address or empty message?
 - How does navigation behave on small screens when all primary pages must remain reachable?
 - What happens if a visitor clears browser storage—are age confirmation and language preference reset?
-- What happens when a visitor deep-links directly to a book detail URL without prior age confirmation?
-- What happens when bilingual content is missing for one language on a generic page (fallback behavior)?
-- How does the age popup interact with screen readers and keyboard-only navigation?
+- When a visitor deep-links to any URL without prior age confirmation, the site-wide age-verification modal appears before page content is interactable.
+- If browser locale is neither English nor Hungarian, the age gate and decline state default to Hungarian.
+- If a content key is missing in the active locale bundle, the site falls back to Hungarian for that string; if still missing, show a neutral placeholder (never a blank critical label).
+- How does the age popup interact with screen readers and keyboard-only navigation? Escape and outside-click behave as decline (blocked state with retry); focus remains trapped until confirm or decline path completes.
 
 ## Requirements *(mandatory)*
 
@@ -174,9 +187,12 @@ A visitor reviews privacy, terms, and cookie information in English or Hungarian
 - **FR-004**: The site MUST provide dedicated About and Contact pages, each available in English and Hungarian.
 - **FR-005**: The site MUST provide legal pages (privacy policy, terms & conditions, cookie policy), each available in English and Hungarian.
 - **FR-006**: Bilingual pages (landing, about, contact, legal) MUST offer a visitor-controlled English/Hungarian language switch; book pages MUST NOT offer a language switch.
+- **FR-006a**: Bilingual page copy MUST resolve per active locale; if a string is absent in the selected locale, the site MUST fall back to Hungarian, then to a visible placeholder—never silent blanks for nav labels, form labels, or legal headings.
 - **FR-007**: All pages MUST share consistent primary navigation appropriate to page type (including Legal where applicable).
-- **FR-008**: The site MUST show an age-verification popup requiring confirmation of age 18+ before allowing access to books overview, book detail, or checkout.
-- **FR-009**: If a visitor declines age verification, the site MUST block books overview, book detail, and checkout while still allowing access to bilingual generic pages.
+- **FR-008**: The site MUST show a site-wide age-verification modal requiring confirmation of age 18+ on every route before any page content is interactable.
+- **FR-008a**: Age-gate copy (title, body, confirm/decline buttons, decline-state messaging) MUST be shown in English or Hungarian based on browser locale auto-detection; MUST default to Hungarian when neither language matches; MUST NOT offer an EN/HU switcher on the modal.
+- **FR-008b**: On age confirmation, if no locale preference is stored, the site MUST persist the gate's detected locale as the bilingual site locale for landing, about, contact, and legal pages.
+- **FR-009**: If a visitor declines age verification—or presses Escape or clicks outside the modal—the site MUST block all routes and show a decline-only blocked state with localized messaging and a retry control to return to the confirm/decline prompt—no landing, about, contact, legal, catalog, or checkout access until confirmed.
 - **FR-010**: Age confirmation MUST persist for the visitor across page views until cleared (browser storage/session policy defined in planning).
 - **FR-011**: Each book listing MUST show at minimum: title, cover image, price, and format availability (physical, e-book, or both), with Hungarian presentation.
 - **FR-012**: Each book detail MUST show at minimum: title, author, description, cover image, price, and format availability, with Hungarian presentation.
@@ -204,14 +220,14 @@ A visitor reviews privacy, terms, and cookie information in English or Hungarian
 ### Measurable Outcomes
 
 - **SC-001**: A new visitor can switch landing page language (EN ↔ HU) in one action and see content update without reload errors.
-- **SC-002**: A visitor who has not confirmed age cannot reach books overview or book detail without completing verification (0 successful bypasses in test scenarios).
+- **SC-002**: A visitor who has not confirmed age cannot reach any site route without completing verification (0 successful bypasses in manual smoke and automated guard tests).
 - **SC-003**: A visitor who confirmed age can reach the books overview from the landing page in no more than two actions.
 - **SC-004**: A visitor can open any listed book's detail page from the overview in no more than two actions.
 - **SC-005**: A visitor can start checkout for a chosen format from the detail page in no more than two actions after landing on that page.
 - **SC-006**: At least 90% of test participants correctly identify physical vs digital format on Hungarian book pages without leaving overview or detail.
 - **SC-007**: A visitor can submit a complete contact inquiry in either language and see confirmation within 30 seconds under normal conditions.
 - **SC-008**: All page types (landing, books overview, book detail, about, contact, each legal page) are reachable via navigation without dead ends, respecting age and language rules.
-- **SC-009**: When the commerce platform is available, displayed prices on Hungarian book pages match checkout prices for that product.
+- **SC-009**: When the commerce platform is available, displayed prices on Hungarian book pages match checkout prices for that product (verified per variant in quickstart smoke; mapper tests assert prices pass through unchanged from Storefront API).
 - **SC-010**: Each legal page is readable in both English and Hungarian with content appropriate to the policy type.
 
 ## Assumptions
@@ -235,6 +251,6 @@ Tracked in [tasks.md](./tasks.md) (**67/67** complete). Quickstart smoke signed 
 | Contact | Formspree via `VITE_CONTACT_FORM_ENDPOINT` (8-char form ID, not email) | Or Vercel `api/contact.ts` + mail provider |
 | Shopify catalog | Storefront API + manual `books` collection | Publish products/collection to custom app sales channel |
 | Book author | Optional; empty if no Shopify metafield | `custom.author` metafield + GraphQL |
-| Test products | [shopify-import/](../../shopify-import/) CSVs | Replace with production catalog in Admin |
+| Age gate (v2) | Site-wide modal; browser-locale EN/HU; decline + retry; Escape/outside = decline | **Shipped** 2026-06-08 |
 
 **When this feature changes**, update in order: `spec.md` (if requirements change) → `plan.md` → `tasks.md` → code → `quickstart.md`.

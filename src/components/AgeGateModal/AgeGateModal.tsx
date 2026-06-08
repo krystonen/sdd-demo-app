@@ -1,10 +1,23 @@
 import { useEffect, useRef, type ReactElement } from "react";
 import styles from "./AgeGateModal.module.css";
 
+export type AgeGateCopy = {
+  title: string;
+  body: string;
+  confirmLabel: string;
+  declineLabel: string;
+  declineMessage: string;
+  retryLabel: string;
+};
+export type AgeGateView = "prompt" | "declined";
+
 type AgeGateModalProps = {
   open: boolean;
+  view: AgeGateView;
+  copy: AgeGateCopy;
   onConfirm: () => void;
   onDecline: () => void;
+  onRetry: () => void;
 };
 
 const FOCUSABLE =
@@ -15,17 +28,22 @@ const getFocusableElements = (root: HTMLElement): HTMLElement[] =>
 
 export const AgeGateModal = ({
   open,
+  view,
+  copy,
   onConfirm,
   onDecline,
+  onRetry,
 }: AgeGateModalProps): ReactElement | null => {
   const dialogRef = useRef<HTMLDivElement>(null);
-  const confirmRef = useRef<HTMLButtonElement>(null);
+  const primaryRef = useRef<HTMLButtonElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const onConfirmRef = useRef(onConfirm);
   const onDeclineRef = useRef(onDecline);
+  const onRetryRef = useRef(onRetry);
 
   onConfirmRef.current = onConfirm;
   onDeclineRef.current = onDecline;
+  onRetryRef.current = onRetry;
 
   useEffect(() => {
     if (!open) return;
@@ -33,12 +51,14 @@ export const AgeGateModal = ({
     previousFocusRef.current = document.activeElement as HTMLElement | null;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    confirmRef.current?.focus();
+    primaryRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key === "Escape") {
         event.preventDefault();
-        onDeclineRef.current();
+        if (view === "prompt") {
+          onDeclineRef.current();
+        }
         return;
       }
 
@@ -70,43 +90,68 @@ export const AgeGateModal = ({
       document.body.style.overflow = prevOverflow;
       previousFocusRef.current?.focus();
     };
-  }, [open]);
+  }, [open, view]);
 
   if (!open) return null;
 
+  const handleOverlayClick = (): void => {
+    if (view === "prompt") {
+      onDeclineRef.current();
+    }
+  };
+
   return (
-    <div className={styles.overlay}>
+    <div
+      className={styles.overlay}
+      onClick={handleOverlayClick}
+      data-testid="age-gate-overlay"
+    >
       <div
         ref={dialogRef}
         className={styles.dialog}
         role="dialog"
         aria-modal="true"
         aria-labelledby="age-gate-title"
-        aria-describedby="age-gate-desc"
+        aria-describedby={view === "prompt" ? "age-gate-desc" : undefined}
+        onClick={(event) => event.stopPropagation()}
       >
         <h2 id="age-gate-title" className={styles.title}>
-          Korhatár-ellenőrzés
+          {view === "prompt" ? copy.title : copy.declineMessage}
         </h2>
-        <p id="age-gate-desc" className={styles.text}>
-          A könyvek böngészéséhez és vásárlásához meg kell erősítened, hogy
-          betöltötted a 18. életévedet.
-        </p>
+        {view === "prompt" ? (
+          <p id="age-gate-desc" className={styles.text}>
+            {copy.body}
+          </p>
+        ) : null}
         <div className={styles.actions}>
-          <button
-            ref={confirmRef}
-            type="button"
-            className={styles.primary}
-            onClick={() => onConfirmRef.current()}
-          >
-            Igen, 18 éves vagy idősebb vagyok
-          </button>
-          <button
-            type="button"
-            className={styles.secondary}
-            onClick={() => onDeclineRef.current()}
-          >
-            Nem, 18 év alatti vagyok
-          </button>
+          {view === "prompt" ? (
+            <>
+              <button
+                ref={primaryRef}
+                type="button"
+                className={styles.primary}
+                onClick={() => onConfirmRef.current()}
+              >
+                {copy.confirmLabel}
+              </button>
+              <button
+                type="button"
+                className={styles.secondary}
+                onClick={() => onDeclineRef.current()}
+              >
+                {copy.declineLabel}
+              </button>
+            </>
+          ) : (
+            <button
+              ref={primaryRef}
+              type="button"
+              className={styles.primary}
+              onClick={() => onRetryRef.current()}
+            >
+              {copy.retryLabel}
+            </button>
+          )}
         </div>
       </div>
     </div>

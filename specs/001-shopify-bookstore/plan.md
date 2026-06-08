@@ -1,32 +1,36 @@
 # Implementation Plan: Shopify Bookstore Website
 
-**Branch**: `001-shopify-bookstore` | **Date**: 2026-06-02 | **Spec**: [spec.md](./spec.md)
+**Branch**: `main` (feature `001-shopify-bookstore`) | **Date**: 2026-06-08 | **Spec**: [spec.md](./spec.md)
 
 **Input**: Feature specification from `/specs/001-shopify-bookstore/spec.md`
 
 ## Summary
 
-Build a **React + Vite** bilingual bookstore marketing site with **Hungarian-only** catalog/detail pages, **18+ age gate**, and **Shopify Storefront API** for products and checkout. Deploy to **Vercel** with **CSS Modules**, **Vitest** for business logic, and a minimal **contact API** (Vercel function or Formspree).
+**v1 (shipped)**: React + Vite bilingual bookstore with route-scoped HU age gate on `/books` only.
+
+**v2 (planned)**: **Site-wide** 18+ age gate on **every route** before any content is interactable. Gate copy in **EN or HU** via **browser locale** auto-detection (default HU). On confirm, **seed** `bookstore_locale` when none stored. **Decline**, **Escape**, and **outside-click** enter a blocked state with **retry**—no generic-page bypass.
+
+Commerce, contact, and deployment model unchanged (Shopify Storefront API, Formspree, Vercel).
 
 ## Technical Context
 
 **Language/Version**: TypeScript 5.x, React 19, Node 20+
 
-**Primary Dependencies**: Vite, react-router-dom, `@shopify/storefront-api-client` (or lightweight GraphQL fetch), Vitest, @testing-library/react (optional for hooks)
+**Primary Dependencies**: Vite, react-router-dom, Vitest; Storefront GraphQL via raw `fetch` in `src/lib/shopify/client.ts` (no `@shopify/storefront-api-client` in v1)
 
 **Storage**: Browser `localStorage` (age verification, locale); Shopify (products, cart, checkout); static content modules in repo
 
-**Testing**: Vitest unit tests for `ageGate`, `locale`, `mapProduct`, `contactValidation`, route guard helpers; manual browser smoke per spec user stories
+**Testing**: Vitest for `ageGate`, `detectBrowserLocale`, `locale`, `mapProduct`, `contactValidation`, app-level `AgeGateGuard`; manual browser smoke per spec user stories
 
 **Target Platform**: Modern browsers; production on Vercel (static SPA + optional serverless `/api/contact`)
 
 **Project Type**: Single-page web application (static storefront)
 
-**Performance Goals**: LCP < 2.5s on 4G for landing; catalog query < 1s perceived with loading skeleton
+**Performance Goals**: LCP < 2.5s on 4G for landing (manual check); catalog shows a loading indicator until Shopify responds (skeleton optional polish)
 
-**Constraints**: No custom commerce backend; scoped CSS only; book pages Hungarian-only; age gate cannot be bypassed on `/books` routes
+**Constraints**: No custom commerce backend; scoped CSS only; book pages Hungarian-only; **site-wide age gate**—no route bypass until confirmed (FR-008–FR-009)
 
-**Scale/Scope**: ~8 page types, 2 locales for marketing/legal, 1 Shopify collection, self-declared age verification
+**Scale/Scope**: ~8 page types, 2 locales for marketing/legal + gate copy, 1 Shopify collection, self-declared age verification
 
 ## Constitution Check
 
@@ -53,6 +57,7 @@ specs/001-shopify-bookstore/
 ├── contracts/           # Phase 1
 │   ├── shopify-storefront.md
 │   ├── routes-and-guards.md
+│   ├── age-gate.md
 │   └── contact-api.md
 └── tasks.md             # Phase 2 (/speckit-tasks)
 ```
@@ -92,9 +97,12 @@ src/
 │   └── ...
 ├── content/
 │   ├── en/
+│   │   └── ageGate.ts
 │   └── hu/
+│       └── ageGate.ts
 ├── lib/
 │   ├── ageGate.ts
+│   ├── detectBrowserLocale.ts
 │   ├── locale.ts
 │   ├── contactValidation.ts
 │   └── shopify/
@@ -111,6 +119,7 @@ src/
 tests/
 └── unit/
     ├── ageGate.test.ts
+    ├── detectBrowserLocale.test.ts
     ├── locale.test.ts
     ├── mapProduct.test.ts
     └── contactValidation.test.ts
@@ -118,7 +127,7 @@ public/
 └── favicon.svg
 ```
 
-**Structure Decision**: Single Vite app at repo root (no monorepo). Commerce logic isolated under `src/lib/shopify/` for Vitest. Bilingual copy in `src/content/{en,hu}/`. Route guards in `src/routes/` per `contracts/routes-and-guards.md`.
+**Structure Decision**: Single Vite app at repo root. **v2**: `AgeGateGuard` wraps `RouterProvider` in `App.tsx` (global), not per `/books` route. Gate strings in `src/content/{en,hu}/ageGate.ts`; detection in `src/lib/detectBrowserLocale.ts`.
 
 ## Complexity Tracking
 
@@ -160,6 +169,15 @@ No other constitution violations.
 - Empty/error states, a11y for modal, responsive nav
 - README + quickstart alignment
 
+### Phase F — Age gate v2 (2026-06-08 spec change)
+
+- `detectBrowserLocale.ts` + Vitest
+- EN/HU `ageGate` content modules
+- Refactor `AgeGateModal`: browser-locale copy, decline + retry UI, overlay/Escape → decline
+- Move `AgeGateGuard` to `App.tsx` (site-wide); remove route-level guards
+- `confirmAge` seeds `bookstore_locale` when absent (FR-008b)
+- Update contracts, quickstart smoke, guard tests (SC-002 all routes)
+
 ## Artifacts Generated
 
 | Artifact | Path |
@@ -168,5 +186,6 @@ No other constitution violations.
 | Data model | [data-model.md](./data-model.md) |
 | Contracts | [contracts/](./contracts/) |
 | Quickstart | [quickstart.md](./quickstart.md) |
+| Age gate contract | [contracts/age-gate.md](./contracts/age-gate.md) |
 
-**Next command**: `/speckit-tasks` to generate `tasks.md` from this plan and the spec user stories.
+**Status**: v1 + v2 implemented (78/78 tasks). See [tasks.md](./tasks.md) and [quickstart.md](./quickstart.md).

@@ -2,10 +2,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   clearAgeVerification,
   confirmAge,
+  confirmAgeWithLocale,
   createAgeVerificationRecord,
   isAgeVerified,
   readAgeVerification,
 } from "@/lib/ageGate";
+import { readLocale, writeLocale } from "@/lib/locale";
 
 describe("ageGate", () => {
   beforeEach(() => {
@@ -48,5 +50,17 @@ describe("ageGate", () => {
     expect(new Date(record.expiresAt).getTime()).toBeGreaterThan(
       new Date(record.confirmedAt).getTime(),
     );
+  });
+
+  it("seeds locale when none stored", () => {
+    confirmAgeWithLocale("en");
+    expect(readLocale()).toBe("en");
+    expect(isAgeVerified()).toBe(true);
+  });
+
+  it("does not overwrite an existing locale preference", () => {
+    writeLocale("hu");
+    confirmAgeWithLocale("en");
+    expect(readLocale()).toBe("hu");
   });
 });

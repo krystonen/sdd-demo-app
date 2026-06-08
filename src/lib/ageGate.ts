@@ -1,3 +1,6 @@
+import type { Locale } from "@/lib/types";
+import { hasStoredLocale, writeLocale } from "@/lib/locale";
+
 const STORAGE_KEY = "bookstore_age_verified";
 const EXPIRY_DAYS = 30;
 
@@ -45,6 +48,14 @@ export const isAgeVerified = (): boolean => readAgeVerification() !== null;
 export const confirmAge = (): AgeVerificationRecord => {
   const record = createAgeVerificationRecord();
   localStorage.setItem(STORAGE_KEY, JSON.stringify(record));
+  return record;
+};
+
+export const confirmAgeWithLocale = (gateLocale: Locale): AgeVerificationRecord => {
+  const record = confirmAge();
+  if (!hasStoredLocale()) {
+    writeLocale(gateLocale);
+  }
   return record;
 };
 

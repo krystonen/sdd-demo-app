@@ -1,6 +1,6 @@
 # Data Model: Shopify Bookstore Website
 
-**Feature**: `001-shopify-bookstore` | **Date**: 2026-06-02
+**Feature**: `001-shopify-bookstore` | **Date**: 2026-06-02 (updated 2026-06-08 for age-gate v2)
 
 ## Overview
 
@@ -53,7 +53,7 @@ Mapped from Shopify Product + variants.
 
 | Field | Type | Rules |
 |-------|------|--------|
-| `confirmed` | boolean | Must be `true` to access gated routes |
+| `confirmed` | boolean | Must be `true` to access any route (v2) |
 | `confirmedAt` | ISO datetime | Set on accept |
 | `expiresAt` | ISO datetime | `confirmedAt + 30 days` |
 
@@ -70,6 +70,19 @@ Mapped from Shopify Product + variants.
 | `message` | string | Required, min 10 chars |
 | `locale` | `en` \| `hu` | Active UI language for email template |
 | `submittedAt` | ISO datetime | Set client-side before POST |
+
+### AgeGateCopy (content module)
+
+| Field | Type | Rules |
+|-------|------|--------|
+| `title` | string | e.g. "Elmúltál 18 éves?" / "Are you 18 or older?" |
+| `body` | string | Site entry restriction message |
+| `confirmLabel` | string | Yes button |
+| `declineLabel` | string | No button |
+| `declineMessage` | string | Shown in blocked state |
+| `retryLabel` | string | Return to prompt |
+
+**Locales**: `src/content/en/ageGate.ts`, `src/content/hu/ageGate.ts`
 
 ### BilingualPageContent
 
@@ -97,15 +110,18 @@ Checkout URL returned from Storefront Cart `checkoutUrl`.
 ### Age verification
 
 ```text
-[none] --accept--> [confirmed, not expired]
+[none] --accept--> [confirmed, not expired] (+ seed locale if unset)
 [confirmed] --expiry/clear storage--> [none]
-[none] --decline--> [blocked] (no storage write; gated routes redirect/modal)
+[none] --decline|escape|overlay--> [declined UI, not persisted] --retry--> [none/prompt]
+[declined UI] --accept--> [confirmed, not expired]
 ```
+
+**Client-only `declined` state**: React state in `AgeGateGuard`; not written to `localStorage`.
 
 ### Locale (bilingual pages only)
 
 ```text
-[default: hu] --switch--> [en | hu]
+[default: hu or browser-detected on gate confirm] --switch--> [en | hu]
 [persisted] --navigate bilingual page--> [same locale]
 [persisted] --navigate book page--> [ignored on book UI; locale unchanged in storage]
 ```
@@ -117,14 +133,13 @@ Checkout URL returned from Storefront Cart `checkoutUrl`.
 [variant chosen] --buy--> [Shopify cart create/update] --> [redirect checkoutUrl]
 ```
 
-## Route access matrix
+## Route access matrix (v2)
 
-| Route | Age required | Locale switcher |
-|-------|--------------|-----------------|
-| `/` landing | No | Yes |
-| `/about`, `/contact` | No | Yes |
-| `/legal/*` | No | Yes |
-| `/books`, `/books/:handle` | Yes | No (HU only) |
+| Route | Age required | Locale switcher (after unlock) |
+|-------|--------------|--------------------------------|
+| All routes (`/`, `/about`, `/contact`, `/legal/*`, `/books`, `/books/:handle`, `*`) | **Yes** (site-wide gate) | Bilingual routes: Yes; book routes: No (HU only) |
+
+**Before confirm**: only age-gate modal interactable (browser-locale copy).
 
 ## Shopify collection assumptions
 

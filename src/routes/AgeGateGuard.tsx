@@ -1,30 +1,32 @@
-import { useState, type ReactElement, type ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { useMemo, useState, type ReactElement, type ReactNode } from "react";
 import { AgeGateModal } from "@/components/AgeGateModal/AgeGateModal";
+import { ageGateEn } from "@/content/en/ageGate";
+import { ageGateHu } from "@/content/hu/ageGate";
 import { useAgeGate } from "@/hooks/useAgeGate";
+import { detectBrowserLocale } from "@/lib/detectBrowserLocale";
 
 type AgeGateGuardProps = {
   children: ReactNode;
 };
 
+type GateView = "prompt" | "declined";
+
 export const AgeGateGuard = ({ children }: AgeGateGuardProps): ReactElement => {
-  const { verified, confirm } = useAgeGate();
-  const [declined, setDeclined] = useState(false);
+  const { verified, confirmWithLocale } = useAgeGate();
+  const [view, setView] = useState<GateView>("prompt");
+  const gateLocale = useMemo(() => detectBrowserLocale(), []);
+  const copy = gateLocale === "en" ? ageGateEn : ageGateHu;
 
   if (verified) return <>{children}</>;
 
-  if (declined) return <Navigate to="/" replace />;
-
   return (
-    <>
-      <AgeGateModal
-        open
-        onConfirm={confirm}
-        onDecline={() => setDeclined(true)}
-      />
-      <div aria-hidden="true" style={{ visibility: "hidden" }}>
-        {children}
-      </div>
-    </>
+    <AgeGateModal
+      open
+      view={view}
+      copy={copy}
+      onConfirm={() => confirmWithLocale(gateLocale)}
+      onDecline={() => setView("declined")}
+      onRetry={() => setView("prompt")}
+    />
   );
 };
