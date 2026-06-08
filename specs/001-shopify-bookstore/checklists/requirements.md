@@ -33,3 +33,4 @@
 
 - Validation pass (iteration 2, post-clarify): All items satisfied after bilingual scope, age verification, and legal pages added (2026-06-01).
 - Planning phase should address constitution alignment (static site + external Shopify checkout + i18n) in Complexity Tracking.
+- Implementation v1 (2026-06-04): spec status **Implemented**; **67/67** tasks complete; quickstart §3 smoke signed off.

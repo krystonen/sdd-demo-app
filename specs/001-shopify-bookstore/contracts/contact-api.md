@@ -44,4 +44,13 @@ Vitest: all rules + localized error message keys.
 
 ## Formspree fallback
 
-If `VITE_CONTACT_FORM_ENDPOINT` is set, POST JSON directly from client; skip Vercel function. Document in `quickstart.md`.
+If `VITE_CONTACT_FORM_ENDPOINT` is set, POST JSON directly from client; skip Vercel function.
+
+| Rule | Value |
+|------|--------|
+| URL format | `https://formspree.io/f/{8_char_form_id}` |
+| Wrong | `https://formspree.io/f/user@email.com` → `FORM_NOT_FOUND` |
+| Headers | `Content-Type: application/json`, `Accept: application/json` |
+| Body | `{ name, email, message, locale }` |
+
+Create the form at [formspree.io](https://formspree.io); set recipient email in the Formspree dashboard, not in the URL.

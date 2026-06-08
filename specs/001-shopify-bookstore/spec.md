@@ -4,7 +4,9 @@
 
 **Created**: 2026-05-28
 
-**Status**: Draft
+**Status**: Implemented (v1)
+
+**Last verified**: 2026-06-04
 
 **Input**: User description: "I am building a website for selling physical and e-books with shopify integration, I want to have a landing page and books overview page and a book detail page and a contact page and an about page."
 
@@ -223,3 +225,16 @@ A visitor reviews privacy, terms, and cookie information in English or Hungarian
 - Visitor accounts on the marketing site are not required.
 - Contact inquiries are delivered to the store owner; FAQ portal is out of scope for v1.
 - Constitution note for planning: static-site delivery applies to marketing pages; Shopify integration and bilingual content structure must be justified in Complexity Tracking.
+
+## Implementation notes (v1, 2026-06-04)
+
+Tracked in [tasks.md](./tasks.md) (**67/67** complete). Quickstart smoke signed off 2026-06-04.
+
+| Area | v1 behavior | Follow-up |
+|------|-------------|-----------|
+| Contact | Formspree via `VITE_CONTACT_FORM_ENDPOINT` (8-char form ID, not email) | Or Vercel `api/contact.ts` + mail provider |
+| Shopify catalog | Storefront API + manual `books` collection | Publish products/collection to custom app sales channel |
+| Book author | Optional; empty if no Shopify metafield | `custom.author` metafield + GraphQL |
+| Test products | [shopify-import/](../../shopify-import/) CSVs | Replace with production catalog in Admin |
+
+**When this feature changes**, update in order: `spec.md` (if requirements change) → `plan.md` → `tasks.md` → code → `quickstart.md`.

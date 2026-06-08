@@ -125,7 +125,8 @@ public/
 | Violation / exception | Why Needed | Simpler Alternative Rejected Because |
 |----------------------|------------|-------------------------------------|
 | Vercel serverless `/api/contact` | Static SPA cannot send email; spec requires form delivery | mailto-only fails FR-017/FR-018 UX; Formspree documented as zero-code alternative in quickstart |
-| `@shopify/storefront-api-client` | Typed Storefront GraphQL + cart mutations | Raw fetch works but more error-prone; still minimal vs Hydrogen |
+| Raw `fetch` for Storefront GraphQL (not `@shopify/storefront-api-client`) | Implemented in `src/lib/shopify/client.ts`; fewer deps, sufficient for v1 | SDK adds typing but was not required for MVP |
+| Formspree for contact (`VITE_CONTACT_FORM_ENDPOINT`) | Client-side POST; no mail provider keys on Vercel for v1 | Vercel `/api/contact` + Resend remains documented alternative |
 
 No other constitution violations.
 
