@@ -1,0 +1,9 @@
+{
+  "workflow": "speckit",
+  "specName": "001-shopify-bookstore",
+  "branch": "001-shopify-bookstore",
+  "selectedAt": "2026-06-04T15:05:32.105Z",
+  "currentStep": "specify",
+  "status": "draft",
+  "history": []
+}

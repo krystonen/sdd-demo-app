@@ -1,0 +1,36 @@
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+
+.image {
+  width: 100%;
+  aspect-ratio: 2/3;
+  object-fit: cover;
+}
+
+.body {
+  padding: var(--space-md);
+}
+
+.title {
+  margin: 0 0 var(--space-xs);
+  font-size: 1rem;
+}
+
+.meta {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+.formats {
+  margin-top: var(--space-sm);
+  font-size: 0.75rem;
+}

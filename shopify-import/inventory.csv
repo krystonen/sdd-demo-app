@@ -1,0 +1,7 @@
+Handle,Title,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Option3 Name,Option3 Value,SKU,HS Code,COO,Location,Bin name,Incoming,Unavailable,Committed,Available,On hand (current),On hand (new)
+az-ejfeli-kert,Az éjféli kert,Format,Physical,,,,,AZ-EK-PHY,,,Budapest Warehouse,,,,,,,25
+az-ejfeli-kert,Az éjféli kert,Format,E-book,,,,,AZ-EK-EBK,,,Budapest Warehouse,,,,,,,999
+budapesti-tortenetek,Budapesti történetek,Format,Physical,,,,,BP-TORT-PHY,,,Budapest Warehouse,,,,,,,30
+budapesti-tortenetek,Budapesti történetek,Format,E-book,,,,,BP-TORT-EBK,,,Budapest Warehouse,,,,,,,999
+programozas-kezdoknek,Programozás kezdőknek,Format,Physical,,,,,PRG-KZD-PHY,,,Budapest Warehouse,,,,,,,20
+programozas-kezdoknek,Programozás kezdőknek,Format,E-book,,,,,PRG-KZD-EBK,,,Budapest Warehouse,,,,,,,999
