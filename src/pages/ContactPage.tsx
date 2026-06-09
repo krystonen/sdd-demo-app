@@ -1,4 +1,5 @@
 import { useState, type ReactElement, type FormEvent } from "react";
+import { Button } from "@/components/Button";
 import { useLocaleContext } from "@/context/LocaleContext";
 import {
   hasContactErrors,
@@ -91,13 +92,9 @@ export const ContactPage = (): ReactElement => {
             <span className={styles.error}>{errors.message}</span>
           ) : null}
         </div>
-        <button
-          type="submit"
-          className={styles.submit}
-          disabled={status === "sending"}
-        >
+        <Button variant="primary" type="submit" disabled={status === "sending"}>
           {status === "sending" ? c.sending : c.submit}
-        </button>
+        </Button>
         {status === "success" ? (
           <p className={styles.success} role="status">
             {c.success}

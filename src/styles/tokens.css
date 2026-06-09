@@ -15,4 +15,44 @@
   --space-xl: 2rem;
   --radius: 8px;
   --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  /* Button — Figma SDD Component Library (symbols 25:2–25:18) */
+  --button-height: 34px;
+  --button-padding-x: 24px;
+  --button-font-size: 11px;
+  --button-font-weight: 500;
+  --button-radius: 0;
+  --button-border-width: 1px;
+  --button-opacity-disabled: 0.38;
+  --button-focus-ring-width: 2px;
+  --button-focus-ring-offset: 2px;
+  --button-focus-ring-color: #9eeffd;
+
+  --button-primary-bg-default: #82d3e0;
+  --button-primary-bg-hover: #004f58;
+  --button-primary-bg-disabled: #82d3e0;
+  --button-primary-text-default: #00363d;
+  --button-primary-text-hover: #9eeffd;
+  --button-primary-text-disabled: #00363d;
+  --button-primary-border-default: transparent;
+
+  --button-secondary-bg-default: #334b4f;
+  --button-secondary-bg-hover: #252b2c;
+  --button-secondary-bg-disabled: #334b4f;
+  --button-secondary-text-default: #cde7ec;
+  --button-secondary-text-hover: #cde7ec;
+  --button-secondary-text-disabled: #cde7ec;
+  --button-secondary-border-default: transparent;
+  --button-secondary-border-hover: transparent;
+  --button-secondary-border-disabled: transparent;
+
+  --button-ghost-bg-default: transparent;
+  --button-ghost-bg-hover: #1b2122;
+  --button-ghost-bg-disabled: transparent;
+  --button-ghost-text-default: #dee3e5;
+  --button-ghost-text-hover: #dee3e5;
+  --button-ghost-text-disabled: #bfc8ca;
+  --button-ghost-border-default: #d4a373;
+  --button-ghost-border-hover: #d4a373;
+  --button-ghost-border-disabled: #3f484a;
 }

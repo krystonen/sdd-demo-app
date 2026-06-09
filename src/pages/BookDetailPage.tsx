@@ -1,5 +1,6 @@
 import { useState, type ReactElement } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Button } from "@/components/Button";
 import { booksHu } from "@/content/hu/books";
 import { useBook } from "@/hooks/useBook";
 import { redirectToCheckout } from "@/lib/shopify/cart";
@@ -72,14 +73,13 @@ export const BookDetailPage = (): ReactElement => {
               </label>
             ))}
           </div>
-          <button
-            type="button"
-            className={styles.buy}
+          <Button
+            variant="primary"
             disabled={!activeFormat?.availableForSale || buying}
             onClick={() => void onBuy()}
           >
             {booksHu.buy}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

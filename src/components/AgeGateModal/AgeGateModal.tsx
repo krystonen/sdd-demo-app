@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactElement } from "react";
+import { Button } from "@/components/Button";
 import styles from "./AgeGateModal.module.css";
 
 export type AgeGateCopy = {
@@ -126,31 +127,21 @@ export const AgeGateModal = ({
         <div className={styles.actions}>
           {view === "prompt" ? (
             <>
-              <button
+              <Button
                 ref={primaryRef}
-                type="button"
-                className={styles.primary}
+                variant="primary"
                 onClick={() => onConfirmRef.current()}
               >
                 {copy.confirmLabel}
-              </button>
-              <button
-                type="button"
-                className={styles.secondary}
-                onClick={() => onDeclineRef.current()}
-              >
+              </Button>
+              <Button variant="secondary" onClick={() => onDeclineRef.current()}>
                 {copy.declineLabel}
-              </button>
+              </Button>
             </>
           ) : (
-            <button
-              ref={primaryRef}
-              type="button"
-              className={styles.primary}
-              onClick={() => onRetryRef.current()}
-            >
+            <Button ref={primaryRef} variant="primary" onClick={() => onRetryRef.current()}>
               {copy.retryLabel}
-            </button>
+            </Button>
           )}
         </div>
       </div>

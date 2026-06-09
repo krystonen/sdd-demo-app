@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { Button } from "@/components/Button";
 import { booksHu } from "@/content/hu/books";
 import styles from "./ShopifyErrorBanner.module.css";
 
@@ -12,9 +13,9 @@ export const ShopifyErrorBanner = ({
   <div className={styles.banner} role="alert">
     <span>{booksHu.catalogError}</span>
     {onRetry ? (
-      <button type="button" className={styles.retry} onClick={onRetry}>
+      <Button variant="ghost" onClick={onRetry}>
         {booksHu.retry}
-      </button>
+      </Button>
     ) : null}
   </div>
 );
