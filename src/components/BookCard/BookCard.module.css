@@ -30,7 +30,8 @@
   color: var(--color-text-muted);
 }
 
-.formats {
-  margin-top: var(--space-sm);
-  font-size: 0.75rem;
+.format {
+  margin: 0 0 var(--space-xs);
+  font-size: 0.875rem;
+  font-weight: 600;
 }

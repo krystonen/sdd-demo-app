@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import type { ReactElement } from "react";
 import { booksHu } from "@/content/hu/books";
-import type { Book } from "@/lib/types";
+import type { Book, BookFormatType } from "@/lib/types";
 import styles from "./BookCard.module.css";
 
-const formatLabel = (type: string): string =>
+const formatLabel = (type: BookFormatType): string =>
   type === "physical" ? booksHu.formatPhysical : booksHu.formatEbook;
 
 export const BookCard = ({ book }: { book: Book }): ReactElement => (
@@ -22,11 +22,9 @@ export const BookCard = ({ book }: { book: Book }): ReactElement => (
           {booksHu.author}: {book.author}
         </p>
       ) : null}
+      <p className={styles.format}>{formatLabel(book.format)}</p>
       <p className={styles.meta}>
         {book.price.amount} {book.price.currencyCode}
-      </p>
-      <p className={styles.formats}>
-        {book.formats.map((f) => formatLabel(f.type)).join(" · ")}
       </p>
     </div>
   </Link>

@@ -5,30 +5,30 @@ CSV products match this app’s Storefront queries and `mapProduct` rules:
 | Requirement | CSV value |
 |-------------|-----------|
 | Collection | Add imported products to manual collection handle **`books`** (or set `VITE_SHOPIFY_BOOKS_COLLECTION`) |
-| Format option | **`Option1 Name`** = `Format` |
-| Physical variant | **`Option1 Value`** = `Physical` (requires shipping) |
-| E-book variant | **`Option1 Value`** = `E-book` (no shipping) |
+| Physical product | Handle **`{title}`** (e.g. `az-ejfeli-kert`), requires shipping |
+| E-book product | Handle **`{title}-e-book`** (e.g. `az-ejfeli-kert-e-book`), no shipping |
+| One variant per product | Single row per product in `products.csv` (no Format option) |
 | Published | `TRUE` / `active` |
 | Tags | `book, books` (optional; collection is what the API uses) |
 
 ## Products included
 
-| Handle | Title | Physical | E-book |
-|--------|-------|----------|--------|
-| `az-ejfeli-kert` | Az éjféli kert | 4990 | 2990 |
-| `budapesti-tortenetek` | Budapesti történetek | 5990 | 3490 |
-| `programozas-kezdoknek` | Programozás kezdőknek | 6990 | 3990 |
+| Physical handle | E-book handle | Title | Physical | E-book |
+|-----------------|---------------|-------|----------|--------|
+| `az-ejfeli-kert` | `az-ejfeli-kert-e-book` | Az éjféli kert | 4990 | 2990 |
+| `budapesti-tortenetek` | `budapesti-tortenetek-e-book` | Budapesti történetek | 5990 | 3490 |
+| `programozas-kezdoknek` | `programozas-kezdoknek-e-book` | Programozás kezdőknek | 6990 | 3990 |
 
 Prices use your store’s **default currency** (Shopify converts the number only; HUF store → HUF, USD store → USD).
 
-Detail URLs: `/books/az-ejfeli-kert`, etc.
+Detail URLs: `/books/az-ejfeli-kert` (physical), `/books/az-ejfeli-kert-e-book` (e-book), etc.
 
 ## Import steps
 
 1. **Remove demo clutter** (optional): In Admin, remove snowboards/sample items from the **`books`** collection (or delete them).
-2. **Import products**: **Products → Import** → choose `products.csv` → upload → confirm mapping (Option1 → Format) → start import.
+2. **Import products**: **Products → Import** → choose `products.csv` → upload → start import (six products, one variant each).
 3. **Import inventory** (after products exist): see [Inventory import](#inventory-import) below.
-4. **Assign collection**: **Products → Collections → `books`** (create if missing; handle must be `books`) → add the three imported products.
+4. **Assign collection**: **Products → Collections → `books`** (create if missing; handle must be `books`) → add all six imported products.
 5. **Sales channel**: Ensure products are available on **Online Store**.
 6. **Shipping** (physical only): **Settings → Shipping** — at least one rate for your market (e-book variants do not require shipping).
 7. **Restart dev app** if needed: `npm run dev` — open `/books` and test **Vásárlás** on each format.
@@ -60,9 +60,10 @@ Use **`inventory.csv`** after `products.csv` has been imported (SKUs must alread
 
 ## Verify in the app
 
-- Catalog shows titles and **non-zero** prices (default variant price).
-- Detail page shows two radios: **Nyomtatott** and **E-könyv**.
-- **Vásárlás** enabled for both when `availableForSale` is true in Shopify.
+- Catalog shows **one card per product** (physical and e-book editions are separate entries) with format label and price.
+- Detail page shows format badge, price, and **Vásárlás** (no format picker).
+- Cross-link to sibling edition when the other product exists in Shopify (e.g. Nyomtatott ↔ E-könyv).
+- **Vásárlás** enabled when `availableForSale` is true in Shopify.
 - Checkout uses Bogus Gateway test card `1` on dev stores.
 
 ## Still seeing the old catalog (Gatsby, snowboards)?
@@ -110,10 +111,10 @@ Do this for **each** new book **and** for the **`books` collection**:
 |-------|-----|
 | Products not on `/books` | Add to `books` collection; check `VITE_SHOPIFY_BOOKS_COLLECTION` |
 | Old list after import | New products not in `books` collection, or not published to Online Store |
-| Only one format / 0 price | Re-import; confirm **Option1 Name** is `Format`, values `Physical` / `E-book` |
+| Only one format / 0 price | Re-import; confirm each product has one variant row and correct handle (`-e-book` suffix for e-books) |
 | Buy disabled | Variant not available on Online Store; inventory/channel settings |
 | Wrong language on books | Book copy comes from Shopify title/body (HU in CSV); UI labels stay Hungarian |
 
 ## Customizing
 
-Edit `products.csv` in Excel or a text editor (UTF-8). Keep the two-row-per-product pattern: first row = product + Physical variant; second row = same **Handle**, empty title, **E-book** variant.
+Edit `products.csv` in Excel or a text editor (UTF-8). Each edition is a **separate product** with its own handle and single variant row.

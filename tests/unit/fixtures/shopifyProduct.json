@@ -9,19 +9,9 @@
       {
         "node": {
           "id": "gid://shopify/ProductVariant/1",
-          "title": "Physical",
+          "title": "Default Title",
           "availableForSale": true,
-          "price": { "amount": "4990", "currencyCode": "HUF" },
-          "selectedOptions": [{ "name": "Format", "value": "Physical" }]
-        }
-      },
-      {
-        "node": {
-          "id": "gid://shopify/ProductVariant/2",
-          "title": "E-book",
-          "availableForSale": true,
-          "price": { "amount": "2990", "currencyCode": "HUF" },
-          "selectedOptions": [{ "name": "Format", "value": "E-book" }]
+          "price": { "amount": "4990", "currencyCode": "HUF" }
         }
       }
     ]

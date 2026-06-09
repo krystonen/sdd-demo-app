@@ -7,13 +7,6 @@ export type Money = {
   currencyCode: string;
 };
 
-export type BookFormat = {
-  type: BookFormatType;
-  variantId: string;
-  price: Money;
-  availableForSale: boolean;
-};
-
 export type Book = {
   id: string;
   handle: string;
@@ -21,8 +14,9 @@ export type Book = {
   author: string;
   description: string;
   coverImageUrl: string;
+  format: BookFormatType;
+  variantId: string;
   price: Money;
-  formats: BookFormat[];
   available: boolean;
 };
 

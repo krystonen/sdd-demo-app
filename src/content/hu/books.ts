@@ -8,7 +8,7 @@ export const booksHu = {
   buy: "Vásárlás",
   author: "Szerző",
   unavailable: "Nem elérhető",
-  selectFormat: "Válassz formátumot",
   notFound: "A könyv nem található.",
   backToCatalog: "Vissza a könyvekhez",
+  alsoAvailableAs: "Elérhető más formátumban is:",
 };
