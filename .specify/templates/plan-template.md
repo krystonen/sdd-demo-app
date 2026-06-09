@@ -43,6 +43,20 @@
 [Gates from `.specify/memory/constitution.md` — React+Vite build, scoped CSS, Vitest
 for business logic, Vercel/Shopify hosting choice, extra deps in Complexity Tracking]
 
+## Design System Check
+
+*GATE for Figma-sourced UI or component features. Mark N/A for non-visual work (e.g.
+Shopify adapters, i18n-only). Re-check after Phase 1 design.*
+
+- [ ] Figma component (or Foundations) node URL documented in `spec.md` and `research.md`
+- [ ] `contracts/design-tokens.md` created from `.specify/templates/design-tokens-contract-template.md`
+- [ ] New `--<component>-*` tokens added to `src/styles/tokens/components.css`, composing from
+  `--sys-*` / `--space-*` / `--font-*` / `--radius-*` (see
+  `specs/004-figma-design-tokens/contracts/component-token-composition.md`)
+- [ ] Component `*.module.css` uses component tokens only — no color/spacing literals
+- [ ] Vitest CSS audit added or extended (`tests/unit/tokens.test.ts` or component test)
+- [ ] Light + dark manual review documented in `quickstart.md` (`prefers-color-scheme`)
+
 ## Project Structure
 
 ### Documentation (this feature)

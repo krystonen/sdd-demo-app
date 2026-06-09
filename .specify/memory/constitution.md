@@ -32,11 +32,26 @@ before adoption.
 
 **Rationale**: Prevents framework sprawl while allowing the chosen baseline toolchain.
 
+### IV. Figma-Aligned Design Tokens
+
+UI components sourced from the SDD Component Library MUST use the shared three-tier
+token system under `src/styles/tokens/` (foundations → component tokens → module CSS).
+Component module CSS MUST NOT contain raw color, spacing, or typography literals (`#`,
+`rgb()`, `hsl()`, or ad-hoc px for semantic spacing)—only `var(--<component>-*)` and
+documented fixed layout dimensions where Figma defines them (e.g. control height).
+Component tokens in `components.css` MUST compose from foundational tokens via `var()`.
+Visual parity with Figma MUST be verifiable (side-by-side review + automated CSS audit).
+Light and dark appearances MUST follow `prefers-color-scheme` via foundation tokens.
+
+**Rationale**: Keeps the storefront aligned with Figma as components accumulate; changing
+a foundation token propagates without per-component edits.
+
 ## Stack Constraints
 
 - **Application**: React (current stable) with Vite as the build tool and dev server.
 - **Styling**: Scoped CSS only—CSS Modules, vanilla-extract, or equivalent per-component
-scoping. Avoid unscoped global styles except minimal resets/theme tokens.
+scoping. Avoid unscoped global styles except minimal resets and the approved token files
+under `src/styles/tokens/`. See Principle IV for Figma component rules.
 - **Testing**: Vitest for unit and integration tests; business-logic modules MUST have
 tests before a user story is marked complete.
 - **Hosting**: Deploy to **Vercel** by default, or another platform only if it offers
@@ -60,9 +75,9 @@ the browser via `npm run dev` or preview deploy.
 - This constitution overrides conflicting conventions for Spec Kit-driven work.
 - Amendments MUST update `.specify/memory/constitution.md`, bump `CONSTITUTION_VERSION`
 per semantic versioning, and set `LAST_AMENDED_DATE` to the amendment date.
-- `/speckit-plan` Constitution Check and `/speckit-analyze` MUST validate against the
-active principles in this file.
+- `/speckit-plan` Constitution Check and Design System Check (for Figma UI features) and
+  `/speckit-analyze` MUST validate against the active principles in this file.
 - Guidance for agents: `.cursor/rules/specify-rules.mdc` and the current feature
 `plan.md`.
 
-**Version**: 1.1.0 | **Ratified**: 2026-05-28 | **Last Amended**: 2026-06-02
+**Version**: 1.2.0 | **Ratified**: 2026-05-28 | **Last Amended**: 2026-06-09
