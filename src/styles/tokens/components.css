@@ -1,0 +1,86 @@
+/* Component tokens — compose from foundational tokens (FR-006) */
+
+:root {
+  /* Button — Figma SDD Component Library (symbols 25:2–25:18) */
+  --button-height: 34px;
+  --button-padding-x: var(--space-lg);
+  --button-font-size: var(--font-size-label-sm);
+  --button-font-weight: var(--font-weight-medium);
+  --button-radius: var(--radius-none);
+  --button-border-width: 1px;
+  --button-opacity-disabled: 0.38;
+  --button-focus-ring-width: 2px;
+  --button-focus-ring-offset: 2px;
+  --button-focus-ring-color: var(--sys-primary-container);
+
+  --button-primary-bg-default: var(--sys-primary-fixed-dim);
+  --button-primary-bg-hover: var(--sys-on-primary-fixed-variant);
+  --button-primary-bg-disabled: var(--sys-primary-fixed-dim);
+  --button-primary-text-default: var(--sys-on-primary-fixed-variant);
+  --button-primary-text-hover: var(--sys-primary-fixed);
+  --button-primary-text-disabled: var(--sys-on-primary-fixed-variant);
+  --button-primary-border-default: transparent;
+
+  --button-secondary-bg-default: var(--sys-on-secondary-container);
+  --button-secondary-bg-hover: var(--sys-surface-container-high);
+  --button-secondary-bg-disabled: var(--sys-on-secondary-container);
+  --button-secondary-text-default: var(--sys-secondary-container);
+  --button-secondary-text-hover: var(--sys-secondary-container);
+  --button-secondary-text-disabled: var(--sys-secondary-container);
+  --button-secondary-border-default: transparent;
+  --button-secondary-border-hover: transparent;
+  --button-secondary-border-disabled: transparent;
+
+  --button-ghost-bg-default: transparent;
+  --button-ghost-bg-hover: var(--sys-surface-container-high);
+  --button-ghost-bg-disabled: transparent;
+  --button-ghost-text-default: var(--sys-on-surface);
+  --button-ghost-text-hover: var(--sys-on-surface);
+  --button-ghost-text-disabled: var(--sys-on-surface-variant);
+  --button-ghost-border-default: var(--sys-accent);
+  --button-ghost-border-hover: var(--sys-accent);
+  --button-ghost-border-disabled: var(--sys-outline-variant);
+
+  /* BookCard — Figma SDD Component Library (symbols 218:50, 218:59) */
+  --book-card-width: 240px;
+  --book-card-min-height: 504px;
+  --book-card-cover-min-height: 304px;
+  --book-card-padding-x: var(--space-md);
+  --book-card-padding-y: var(--space-md);
+  --book-card-gap: var(--space-sm);
+  --book-card-border-width: 1px;
+  --book-card-radius: var(--radius-none);
+  --book-card-image-radius: var(--radius-none);
+  --book-card-focus-ring-width: 2px;
+  --book-card-focus-ring-offset: 2px;
+  --book-card-focus-ring-color: var(--sys-primary-container);
+
+  --book-card-bg-default: var(--sys-surface-container);
+  --book-card-bg-hover: var(--sys-surface-container);
+  --book-card-border-default: var(--sys-surface-variant);
+  --book-card-border-hover: var(--sys-accent);
+  --book-card-cover-bg: var(--sys-outline-variant);
+  --book-card-cover-border-default: var(--sys-surface-variant);
+  --book-card-cover-border-hover: var(--sys-accent);
+  --book-card-shadow-default: none;
+  --book-card-shadow-hover: none;
+
+  --book-card-title-color-default: var(--sys-on-surface);
+  --book-card-title-color-hover: var(--sys-on-surface);
+  --book-card-title-font-size: var(--font-size-title-md);
+  --book-card-title-font-weight: var(--font-weight-semibold);
+
+  --book-card-meta-color-default: var(--sys-on-surface-variant);
+  --book-card-meta-color-hover: var(--sys-on-surface-variant);
+  --book-card-meta-font-size: var(--font-size-body-sm);
+
+  --book-card-format-bg-default: var(--sys-accent-container);
+  --book-card-format-bg-hover: var(--sys-accent-container);
+  --book-card-format-border-default: var(--sys-accent);
+  --book-card-format-border-hover: var(--sys-accent);
+  --book-card-format-color-default: var(--sys-on-accent-container);
+  --book-card-format-font-size: var(--font-size-label-lg);
+  --book-card-format-font-weight: var(--font-weight-medium);
+  --book-card-format-padding-x: var(--space-sm);
+  --book-card-format-padding-y: var(--space-xs);
+}

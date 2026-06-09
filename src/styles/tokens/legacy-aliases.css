@@ -1,0 +1,17 @@
+/* Legacy aliases — deprecated names mapping to foundational tokens (FR-005) */
+
+:root {
+  --color-bg: var(--sys-background);
+  --color-surface: var(--sys-surface);
+  --color-text: var(--sys-on-surface);
+  --color-text-muted: var(--sys-on-surface-variant);
+  --color-accent: var(--sys-accent);
+  --color-accent-hover: var(--sys-accent-container);
+  --color-border: var(--sys-outline-variant);
+  --color-error: var(--sys-error);
+
+  --font-sans: var(--font-family-body);
+
+  --radius: var(--radius-md);
+  --shadow: none;
+}

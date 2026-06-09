@@ -33,19 +33,19 @@ export const BookCard = ({ book }: BookCardProps): ReactElement => { ... };
 | Author | `booksHu.author`: `book.author` | Omit entire line when `author` is falsy |
 | Format | `formatLabel(book.format)` | Hungarian via `booksHu` |
 | Price | `{amount} {currencyCode}` | Meta typography tokens |
-| CTA | `booksHu.viewBook` | Whole-card `Link` with `aria-label` (Figma symbols have no separate button) |
+| Navigation label | `booksHu.viewBook` | Used in link `aria-label` only — not a visible button (Figma symbols have no separate control) |
 
-**Styling rule**: `BookCard.module.css` references **only** `--book-card-*` tokens from [design-tokens.md](./design-tokens.md). No `#`, `rgb(`, or raw layout literals in module file (SC-005 audit). CTA uses `Button` + `--button-*` tokens internally.
+**Styling rule**: `BookCard.module.css` references **only** `--book-card-*` tokens from [design-tokens.md](./design-tokens.md). No `#`, `rgb(`, or raw layout literals in module file (SC-005 audit).
 
 ## Interaction contract
 
 | Requirement | Behavior |
 |-------------|----------|
-| Navigation | Activating CTA navigates to `/books/{book.handle}` |
+| Navigation | The card root is a `Link` to `/books/{book.handle}`; click, tap, or keyboard activation navigates to book detail |
 | Card hover | `.card:hover` and `.card:focus-within` apply Hover tokens (`218:59`) |
-| Accessible name | Book title exposed via heading; CTA has visible label |
-| Keyboard | Tab to CTA; Enter/Space activates link navigation |
-| Focus | Visible `:focus-visible` on CTA; card may use `--book-card-focus-ring` if needed |
+| Accessible name | Book title exposed via heading; link `aria-label` is `` `${booksHu.viewBook}: ${book.title}` `` |
+| Keyboard | Tab focuses the card link (single logical target); Enter activates navigation |
+| Focus | Visible `:focus-visible` outline on `.card` using `--book-card-focus-ring-*` tokens; distinct from Default and Hover |
 
 ## Consumer mapping (FR-006)
 
@@ -55,9 +55,7 @@ export const BookCard = ({ book }: BookCardProps): ReactElement => { ... };
 
 ## Composition
 
-| Child | Source | Variant (confirm at implement) |
-|-------|--------|--------------------------------|
-| CTA | `src/components/Button/Button.tsx` | Match Figma Hover/Default CTA — likely `secondary` or `primary` per symbol inspection |
+No child components. The card is a single React Router `Link` wrapping cover and body regions — no `Button` composition.
 
 ## Tests (Vitest)
 

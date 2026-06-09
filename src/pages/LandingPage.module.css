@@ -20,7 +20,7 @@
   display: inline-block;
   padding: var(--space-md) var(--space-xl);
   background: var(--color-accent);
-  color: #fff;
+  color: var(--sys-on-accent);
   text-decoration: none;
   border-radius: var(--radius);
   font-weight: 600;

@@ -60,19 +60,19 @@ description: "Task list for Figma BookCard Component"
 
 ## Phase 4: User Story 2 - Navigate to Book Detail From a Card (Priority: P2)
 
-**Goal**: CTA navigates to book detail; card and CTA show Figma Hover feedback; keyboard-accessible activation
+**Goal**: Whole-card link navigates to book detail; card shows Figma Hover feedback; keyboard-accessible activation
 
-**Independent Test**: Click CTA → `/books/{handle}`; hover card matches `218:59`; Tab to CTA shows focus ring; Enter navigates
+**Independent Test**: Click card → `/books/{handle}`; hover card matches `218:59`; Tab to card shows focus ring; Enter navigates
 
 ### Tests for User Story 2
 
-- [X] T009 [P] [US2] Extend `tests/unit/BookCard.test.tsx` asserting CTA link `href` includes `book.handle`
+- [X] T009 [P] [US2] Extend `tests/unit/BookCard.test.tsx` asserting card link `href` includes `book.handle`
 
 ### Implementation for User Story 2
 
-- [X] T010 [US2] Compose shared `Button` CTA with `booksHu.viewBook` and `Link` to `/books/{book.handle}` in `src/components/BookCard/BookCard.tsx` (confirm variant against Figma `218:50`/`218:59`)
+- [X] T010 [US2] Wrap card in whole-card React Router `Link` to `/books/{book.handle}` with `aria-label` from `booksHu.viewBook` in `src/components/BookCard/BookCard.tsx` (Figma symbols have no separate button)
 - [X] T011 [US2] Implement Hover state in `src/components/BookCard/BookCard.module.css` via `.card:hover` and `.card:focus-within` per symbol `218:59`
-- [X] T012 [US2] Ensure accessible name (title heading + CTA label) and keyboard activation in `src/components/BookCard/BookCard.tsx` (FR-005)
+- [X] T012 [US2] Ensure accessible name (title heading + link `aria-label`) and keyboard activation on the card link in `src/components/BookCard/BookCard.tsx` (FR-005)
 
 **Checkpoint**: SC-006 navigation works; hover/focus visible on manual smoke per `quickstart.md` sections 2–5
 
@@ -121,7 +121,7 @@ description: "Task list for Figma BookCard Component"
 ### User Story Dependencies
 
 - **US1 (P1)**: After Phase 2 — no dependency on US2/US3
-- **US2 (P2)**: After US1 — adds CTA navigation and hover on completed card shell
+- **US2 (P2)**: After US1 — adds whole-card link navigation and hover on completed card shell
 - **US3 (P3)**: After US2 — grid tuning and audits assume final component
 
 ### Within Each User Story
@@ -176,7 +176,7 @@ Task T015: BooksOverviewPage.module.css grid tweak
 
 1. Setup + Foundational → tokens + `booksHu.viewBook` ready  
 2. US1 → Default card on overview → test → demo (**MVP**)  
-3. US2 → CTA + Hover + keyboard → navigation smoke  
+3. US2 → link + Hover + keyboard → navigation smoke  
 4. US3 → grid + token audit → responsive smoke  
 5. Polish → SC-001 visual review + full test suite
 
@@ -194,8 +194,8 @@ Task T015: BooksOverviewPage.module.css grid tweak
 ## Notes
 
 - Figma source: [BookCard `218:68`](https://www.figma.com/design/YR4A9Vf42an3qee8HaiwDx/SDD-Component-Library?node-id=218-68)
-- **FR-010**: Never add hex/rgb/px literals to `BookCard.module.css` — `--book-card-*` tokens only; CTA uses `Button` / `--button-*`
+- **FR-010**: Never add hex/rgb/px literals to `BookCard.module.css` — `--book-card-*` tokens only
 - Legacy `--color-surface` globals stay for non–book-card UI until a future rebrand
 - Landing page featured teaser out of scope per spec Assumptions
 - Code Connect deferred per spec Assumptions
-- **T010 note**: Figma symbols `218:50`/`218:59` have no separate View Book button — navigation uses whole-card `Link` with `aria-label` from `booksHu.viewBook`
+- Navigation: whole-card `Link` with `aria-label` from `booksHu.viewBook` — no `Button` child

@@ -6,13 +6,13 @@
 
 ## Summary
 
-Rebuild the shared **`BookCard`** React component to match the Figma SDD Component Library ([BookCard `218:68`](https://www.figma.com/design/YR4A9Vf42an3qee8HaiwDx/SDD-Component-Library?node-id=218-68)) with **Default** and **Hover** states. All BookCard chrome MUST use **`--book-card-*` CSS custom properties** mapped from Figma variables (FR-010). Replace the legacy ad-hoc `BookCard` on the books overview catalog grid; compose the existing **`Button`** component for the card CTA per Figma layout.
+Rebuild the shared **`BookCard`** React component to match the Figma SDD Component Library ([BookCard `218:68`](https://www.figma.com/design/YR4A9Vf42an3qee8HaiwDx/SDD-Component-Library?node-id=218-68)) with **Default** and **Hover** states. All BookCard chrome MUST use **`--book-card-*` CSS custom properties** mapped from Figma variables (FR-010). Replace the legacy ad-hoc `BookCard` on the books overview catalog grid. Navigation uses a **whole-card `Link`** with `aria-label` from `booksHu.viewBook` — Figma symbols have no separate button (FR-004 / US2).
 
 ## Technical Context
 
 **Language/Version**: TypeScript 5.x, React 19, Node 20+
 
-**Primary Dependencies**: Vite, CSS Modules (existing); reuses `Button` from `002-figma-button-component` — no new npm packages
+**Primary Dependencies**: Vite, CSS Modules, React Router `Link` (existing) — no new npm packages
 
 **Storage**: N/A (presentational component; consumes existing `Book` type)
 
@@ -26,7 +26,7 @@ Rebuild the shared **`BookCard`** React component to match the Figma SDD Compone
 
 **Constraints**: Scoped CSS only; FR-010 token-only BookCard styles; 240 × 504 px Figma reference size; `:focus-visible` ring where Figma lacks Focus symbol; Hungarian copy via `booksHu`
 
-**Scale/Scope**: 1 component rewrite, ~25 book-card tokens, 1 consumer page (`BooksOverviewPage`), 1 new `booksHu` label for CTA
+**Scale/Scope**: 1 component rewrite, ~25 book-card tokens, 1 consumer page (`BooksOverviewPage`), 1 new `booksHu.viewBook` navigation label
 
 ## Constitution Check
 
@@ -36,7 +36,7 @@ Rebuild the shared **`BookCard`** React component to match the Figma SDD Compone
 |-----------|--------|-------|
 | I. Static-First Delivery | **Pass** | Client-only component; no backend |
 | II. Browser-Verifiable & Tested Logic | **Pass** | Vitest for BookCard render/link; browser smoke per quickstart |
-| III. Simplicity (YAGNI) | **Pass** | No UI library; CSS Modules + tokens; reuses `Button` |
+| III. Simplicity (YAGNI) | **Pass** | No UI library; CSS Modules + tokens; whole-card `Link` only |
 
 **Post-design re-check**: **Pass** — design artifacts use approved stack; no new dependencies.
 
@@ -53,7 +53,7 @@ specs/003-figma-book-card/
 ├── contracts/
 │   ├── book-card-component.md
 │   └── design-tokens.md
-└── tasks.md             # Phase 2 (/speckit-tasks — not yet created)
+└── tasks.md             # Phase 2 — 20/20 complete (2026-06-09)
 ```
 
 ### Source Code (changes)
@@ -62,10 +62,10 @@ specs/003-figma-book-card/
 src/
 ├── components/
 │   └── BookCard/
-│       ├── BookCard.tsx         # rewrite — Figma layout + Button CTA
+│       ├── BookCard.tsx         # rewrite — Figma layout + whole-card Link
 │       └── BookCard.module.css  # var(--book-card-*) only
 ├── content/
-│   └── hu/books.ts              # + viewBook CTA label (Hungarian)
+│   └── hu/books.ts              # + viewBook navigation label (Hungarian)
 ├── pages/
 │   ├── BooksOverviewPage.tsx    # unchanged import; grid tweak optional
 │   └── BooksOverviewPage.module.css  # grid min track ≥ 240px if needed
@@ -87,7 +87,7 @@ No constitution violations. No new dependencies.
 |------|-------|
 | Dual token sets (legacy globals + new `--book-card-*`) | Intentional — card feature scoped; global rebrand deferred |
 | Figma Focus state absent | `:focus-visible` token documented in contracts |
-| `Button` composition inside `BookCard` | Reuses shipped design-system button; CTA variant confirmed at implement time against Hover symbol |
+| Whole-card `Link` (no separate CTA control) | Figma symbols `218:50`/`218:59` have no View Book button; `booksHu.viewBook` supplies `aria-label` only |
 
 ## Implementation Phases (for /speckit-tasks)
 
@@ -100,7 +100,7 @@ No constitution violations. No new dependencies.
 ### Phase B — BookCard component (P1 / P2)
 
 - Rewrite `BookCard.tsx` + `BookCard.module.css` per [contracts/book-card-component.md](./contracts/book-card-component.md)
-- Add `booksHu.viewBook` Hungarian CTA label
+- Add `booksHu.viewBook` Hungarian navigation label (link `aria-label`)
 - Vitest: render fields, author omission, `href` to `/books/{handle}`, optional CSS literal audit
 
 ### Phase C — Consumer migration (FR-006 / SC-002)

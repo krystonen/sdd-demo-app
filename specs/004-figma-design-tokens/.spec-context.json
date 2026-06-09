@@ -1,0 +1,26 @@
+{
+  "workflow": "speckit",
+  "specName": "004-figma-design-tokens",
+  "branch": "004-figma-design-tokens",
+  "selectedAt": "2026-06-09T16:00:00.000Z",
+  "currentStep": "implement",
+  "status": "implemented",
+  "history": [
+    {
+      "step": "specify",
+      "completedAt": "2026-06-09T13:00:00.000Z"
+    },
+    {
+      "step": "plan",
+      "completedAt": "2026-06-09T16:00:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "completedAt": "2026-06-09T16:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "completedAt": "2026-06-09T16:24:00.000Z"
+    }
+  ]
+}
