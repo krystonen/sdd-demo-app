@@ -1,0 +1,32 @@
+.link {
+  text-decoration: var(--link-text-decoration-default);
+  color: var(--link-text-default);
+  font-family: inherit;
+  font-size: var(--link-font-size);
+  font-weight: var(--link-font-weight);
+  line-height: var(--link-line-height);
+}
+
+.link:hover {
+  color: var(--link-text-hover);
+  text-decoration: var(--link-text-decoration-hover);
+}
+
+.link:active {
+  color: var(--link-text-hover);
+}
+
+.link.active {
+  color: var(--link-text-active);
+  text-decoration: var(--link-text-decoration-active);
+}
+
+.link.active:hover {
+  color: var(--link-text-hover);
+}
+
+.link:focus-visible {
+  outline: var(--link-focus-ring-width) solid var(--link-focus-ring-color);
+  outline-offset: var(--link-focus-ring-offset);
+  border-radius: var(--radius-none);
+}

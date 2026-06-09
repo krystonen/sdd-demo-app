@@ -94,4 +94,19 @@
   --book-card-format-padding-x: var(--space-sm);
   --book-card-format-padding-y: var(--space-xs);
   --book-card-format-letter-spacing: var(--letter-spacing-wide);
+
+  /* Link — Figma SDD Component Library (symbols 133:2, 133:4, 133:6) */
+  --link-font-size: var(--font-size-body-sm);
+  --link-font-weight: var(--font-weight-medium);
+  --link-line-height: var(--line-height-body);
+  --link-focus-ring-width: 2px;
+  --link-focus-ring-offset: 2px;
+  --link-focus-ring-color: var(--sys-primary-container);
+
+  --link-text-default: var(--sys-on-surface);
+  --link-text-hover: var(--sys-accent);
+  --link-text-active: var(--sys-accent);
+  --link-text-decoration-default: none;
+  --link-text-decoration-hover: none;
+  --link-text-decoration-active: none;
 }

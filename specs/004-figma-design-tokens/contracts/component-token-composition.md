@@ -67,6 +67,19 @@ Disabled states: apply `opacity: var(--button-opacity-disabled)` on control; bg/
 | `--book-card-format-letter-spacing` | `var(--letter-spacing-wide)` | 2.5px badge |
 | `--book-card-focus-ring-color` | `var(--sys-primary-container)` | Shared with Button focus |
 
+## Link composition (target)
+
+| Component token | Composes from | Figma alignment |
+|-----------------|---------------|-----------------|
+| `--link-text-default` | `var(--sys-on-surface)` | Default `133:2` label |
+| `--link-text-hover` | `var(--sys-accent)` | Hover `133:4` label |
+| `--link-text-active` | `var(--sys-accent)` | Active `133:6` label |
+| `--link-font-size` | `var(--font-size-body-sm)` | 14px body-sm label |
+| `--link-font-weight` | `var(--font-weight-medium)` | 500 weight |
+| `--link-line-height` | `var(--line-height-body)` | 150% line height |
+| `--link-text-decoration-default` | `none` | No underline Default |
+| `--link-focus-ring-color` | `var(--sys-primary-container)` | Extension — no Figma Focus symbol |
+
 Exact semantic bindings verified against Figma component variable links at implement time; update this table if MCP export differs.
 
 ## Propagation test (SC-006)

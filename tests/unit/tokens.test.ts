@@ -90,4 +90,13 @@ describe("design tokens", () => {
     expect(css).toContain('@import "./tokens/legacy-aliases.css"');
     expect(css).toContain('@import "./tokens/components.css"');
   });
+
+  it("components.css defines --link-* tokens composing from foundations (SC-005)", () => {
+    const css = readFileSync(join(tokenDir, "components.css"), "utf8");
+    expect(css).toContain("--link-text-default:");
+    expect(css).toContain("--link-text-hover:");
+    expect(css).toContain("--link-text-active:");
+    expect(css).toMatch(/--link-text-default:\s*var\(--sys-/);
+    expect(css).toMatch(/--link-font-size:\s*var\(--font-/);
+  });
 });
