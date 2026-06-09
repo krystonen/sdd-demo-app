@@ -78,6 +78,24 @@
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
 
+<!--
+  =============================================================================
+  OPTIONAL: Figma-sourced UI component features — include this block and replace
+  placeholders. Delete for non-visual features. See specs/002-figma-button-component/
+  and specs/003-figma-book-card/ for completed examples.
+  =============================================================================
+
+## Design Reference *(Figma UI components only)*
+
+Authoritative Figma source: [Component name — SDD Component Library](FIGMA_URL) (node `X:Y`).
+
+Published variants in Figma: [list Style= / State= matrix].
+
+Component styling in Figma is bound to design variables. The implemented component MUST
+use equivalent shared tokens in `src/styles/tokens/components.css` — not one-off values.
+
+-->
+
 ## Requirements *(mandatory)*
 
 <!--
@@ -92,6 +110,18 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
+
+<!--
+  Figma UI component additions (renumber as needed):
+
+- **FR-00N**: Visual design MUST be sourced from the Figma component page ([node URL]).
+- **FR-00N+1**: Component MUST support exactly the variants and states published in Figma.
+- **FR-00N+2**: Every visual property MUST use shared design tokens (`--<component>-*`)
+  from `src/styles/tokens/components.css` — hardcoded colors, spacing, or typography
+  literals in module CSS are NOT permitted.
+- **FR-00N+3**: Visual parity MUST be verifiable by side-by-side comparison against Figma
+  symbols for every in-scope variant and state, in both light and dark contexts.
+-->
 
 *Example of marking unclear requirements:*
 
@@ -116,6 +146,15 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+<!--
+  Figma UI component additions (renumber as needed):
+
+- **SC-00N**: 100% of in-scope variants and states match Figma symbols (≤2px spacing
+  deviation; no perceptible hue shift).
+- **SC-00N+1**: Design-token audit — 100% of component visual properties map to named
+  tokens; zero orphan literals in `*.module.css`.
+-->
 
 ## Assumptions
 
