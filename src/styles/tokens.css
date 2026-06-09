@@ -55,4 +55,47 @@
   --button-ghost-border-default: #d4a373;
   --button-ghost-border-hover: #d4a373;
   --button-ghost-border-disabled: #3f484a;
+
+  /* BookCard — Figma SDD Component Library (symbols 218:50, 218:59) */
+  --book-card-width: 240px;
+  --book-card-min-height: 504px;
+  --book-card-cover-min-height: 304px;
+  --book-card-padding-x: 16px;
+  --book-card-padding-y: 16px;
+  --book-card-gap: 8px;
+  --book-card-border-width: 1px;
+  --book-card-radius: 0;
+  --book-card-image-radius: 0;
+  --book-card-focus-ring-width: 2px;
+  --book-card-focus-ring-offset: 2px;
+  --book-card-focus-ring-color: #9eeffd;
+
+  --book-card-bg-default: #eaf4f6;
+  --book-card-bg-hover: #eaf4f6;
+  --book-card-border-default: #c5d8dc;
+  --book-card-border-hover: #d4a373;
+  --book-card-cover-bg: #b0b0b0;
+  --book-card-cover-border-default: #c5d8dc;
+  --book-card-cover-border-hover: #d4a373;
+  --book-card-shadow-default: none;
+  --book-card-shadow-hover: none;
+
+  --book-card-title-color-default: #1a1a1a;
+  --book-card-title-color-hover: #1a1a1a;
+  --book-card-title-font-size: 16px;
+  --book-card-title-font-weight: 600;
+
+  --book-card-meta-color-default: #5c5c5c;
+  --book-card-meta-color-hover: #5c5c5c;
+  --book-card-meta-font-size: 14px;
+
+  --book-card-format-bg-default: #f5ebe0;
+  --book-card-format-bg-hover: #f5ebe0;
+  --book-card-format-border-default: #d4a373;
+  --book-card-format-border-hover: #d4a373;
+  --book-card-format-color-default: #5c4033;
+  --book-card-format-font-size: 12px;
+  --book-card-format-font-weight: 500;
+  --book-card-format-padding-x: 8px;
+  --book-card-format-padding-y: 4px;
 }

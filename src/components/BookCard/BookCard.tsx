@@ -8,22 +8,24 @@ const formatLabel = (type: BookFormatType): string =>
   type === "physical" ? booksHu.formatPhysical : booksHu.formatEbook;
 
 export const BookCard = ({ book }: { book: Book }): ReactElement => (
-  <Link to={`/books/${book.handle}`} className={styles.card}>
-    <img
-      src={book.coverImageUrl}
-      alt=""
-      className={styles.image}
-      loading="lazy"
-    />
+  <Link
+    to={`/books/${book.handle}`}
+    className={styles.card}
+    aria-label={`${booksHu.viewBook}: ${book.title}`}
+  >
+    <div className={styles.cover}>
+      <img
+        src={book.coverImageUrl}
+        alt=""
+        className={styles.image}
+        loading="lazy"
+      />
+    </div>
     <div className={styles.body}>
       <h3 className={styles.title}>{book.title}</h3>
-      {book.author ? (
-        <p className={styles.meta}>
-          {booksHu.author}: {book.author}
-        </p>
-      ) : null}
-      <p className={styles.format}>{formatLabel(book.format)}</p>
-      <p className={styles.meta}>
+      {book.author ? <p className={styles.author}>{book.author}</p> : null}
+      <span className={styles.format}>{formatLabel(book.format)}</span>
+      <p className={styles.price}>
         {book.price.amount} {book.price.currencyCode}
       </p>
     </div>

@@ -6,6 +6,7 @@ export const booksHu = {
   formatPhysical: "Nyomtatott",
   formatEbook: "E-könyv",
   buy: "Vásárlás",
+  viewBook: "Könyv megtekintése",
   author: "Szerző",
   unavailable: "Nem elérhető",
   notFound: "A könyv nem található.",
