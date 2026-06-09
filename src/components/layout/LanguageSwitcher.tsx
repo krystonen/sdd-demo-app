@@ -1,4 +1,5 @@
 import type { ReactElement } from "react";
+import { Button } from "@/components/Button";
 import { useLocaleContext } from "@/context/LocaleContext";
 import type { Locale } from "@/lib/types";
 import styles from "./LanguageSwitcher.module.css";
@@ -11,22 +12,20 @@ export const LanguageSwitcher = (): ReactElement => {
   return (
     <div className={styles.switcher} role="group" aria-label={content.common.language}>
       <span className={styles.label}>{content.common.language}:</span>
-      <button
-        type="button"
-        className={locale === "en" ? styles.btnActive : styles.btn}
+      <Button
+        variant={locale === "en" ? "primary" : "ghost"}
         onClick={() => set("en")}
         aria-pressed={locale === "en"}
       >
         EN
-      </button>
-      <button
-        type="button"
-        className={locale === "hu" ? styles.btnActive : styles.btn}
+      </Button>
+      <Button
+        variant={locale === "hu" ? "primary" : "ghost"}
         onClick={() => set("hu")}
         aria-pressed={locale === "hu"}
       >
         HU
-      </button>
+      </Button>
     </div>
   );
 };
