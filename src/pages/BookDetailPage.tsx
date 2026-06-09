@@ -12,8 +12,7 @@ const formatLabel = (type: BookFormatType): string =>
 
 export const BookDetailPage = (): ReactElement => {
   const { handle } = useParams<{ handle: string }>();
-  const { book, loading, error } = useBook(handle);
-  const [selected, setSelected] = useState<BookFormatType | null>(null);
+  const { book, sibling, loading, error } = useBook(handle);
   const [buying, setBuying] = useState(false);
 
   if (loading) return <p>…</p>;
@@ -27,14 +26,11 @@ export const BookDetailPage = (): ReactElement => {
       </div>
     );
 
-  const activeType = selected ?? book.formats.find((f) => f.availableForSale)?.type ?? book.formats[0]?.type;
-  const activeFormat = book.formats.find((f) => f.type === activeType);
-
   const onBuy = async (): Promise<void> => {
-    if (!activeFormat?.availableForSale) return;
+    if (!book.available) return;
     setBuying(true);
     try {
-      await redirectToCheckout(activeFormat.variantId);
+      await redirectToCheckout(book.variantId);
     } finally {
       setBuying(false);
     }
@@ -48,6 +44,7 @@ export const BookDetailPage = (): ReactElement => {
       <div className={styles.layout}>
         <img src={book.coverImageUrl} alt="" className={styles.image} />
         <div>
+          <p className={styles.formatBadge}>{formatLabel(book.format)}</p>
           <h1 className={styles.title}>{book.title}</h1>
           {book.author ? (
             <p className={styles.author}>
@@ -58,28 +55,26 @@ export const BookDetailPage = (): ReactElement => {
             className={styles.description}
             dangerouslySetInnerHTML={{ __html: book.description }}
           />
-          <p>{booksHu.selectFormat}</p>
-          <div className={styles.formats}>
-            {book.formats.map((f) => (
-              <label key={f.type} className={styles.formatRow}>
-                <input
-                  type="radio"
-                  name="format"
-                  checked={activeType === f.type}
-                  onChange={() => setSelected(f.type)}
-                />
-                {formatLabel(f.type)} — {f.price.amount} {f.price.currencyCode}
-                {!f.availableForSale ? ` (${booksHu.unavailable})` : ""}
-              </label>
-            ))}
-          </div>
+          <p className={styles.price}>
+            {book.price.amount} {book.price.currencyCode}
+          </p>
           <Button
             variant="primary"
-            disabled={!activeFormat?.availableForSale || buying}
+            disabled={!book.available || buying}
             onClick={() => void onBuy()}
           >
             {booksHu.buy}
           </Button>
+          {sibling ? (
+            <div className={styles.sibling}>
+              <p className={styles.siblingLabel}>{booksHu.alsoAvailableAs}</p>
+              <Link to={`/books/${sibling.handle}`} className={styles.siblingLink}>
+                {formatLabel(sibling.format)} — {sibling.price.amount}{" "}
+                {sibling.price.currencyCode}
+                {!sibling.available ? ` (${booksHu.unavailable})` : ""}
+              </Link>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

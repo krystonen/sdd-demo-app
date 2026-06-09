@@ -1,0 +1,26 @@
+{
+  "workflow": "speckit",
+  "specName": "003-figma-book-card",
+  "branch": "003-figma-book-card",
+  "selectedAt": "2026-06-09T13:24:14.498Z",
+  "currentStep": "implement",
+  "status": "implemented",
+  "history": [
+    {
+      "step": "specify",
+      "completedAt": "2026-06-09T13:24:14.498Z"
+    },
+    {
+      "step": "plan",
+      "completedAt": "2026-06-09T14:00:00.000Z"
+    },
+    {
+      "step": "tasks",
+      "completedAt": "2026-06-09T14:30:00.000Z"
+    },
+    {
+      "step": "implement",
+      "completedAt": "2026-06-09T15:45:00.000Z"
+    }
+  ]
+}

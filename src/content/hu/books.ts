@@ -6,9 +6,10 @@ export const booksHu = {
   formatPhysical: "Nyomtatott",
   formatEbook: "E-könyv",
   buy: "Vásárlás",
+  viewBook: "Könyv megtekintése",
   author: "Szerző",
   unavailable: "Nem elérhető",
-  selectFormat: "Válassz formátumot",
   notFound: "A könyv nem található.",
   backToCatalog: "Vissza a könyvekhez",
+  alsoAvailableAs: "Elérhető más formátumban is:",
 };
