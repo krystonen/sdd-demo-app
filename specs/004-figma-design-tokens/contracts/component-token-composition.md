@@ -51,9 +51,20 @@ Disabled states: apply `opacity: var(--button-opacity-disabled)` on control; bg/
 | `--book-card-padding-y` | `var(--space-md)` | 16px |
 | `--book-card-gap` | `var(--space-sm)` | 8px |
 | `--book-card-radius` | `var(--radius-none)` | Sharp card |
-| `--book-card-title-font-size` | `var(--font-title-md-size)` | 16px title |
-| `--book-card-meta-font-size` | `var(--font-body-sm-size)` | 14px meta |
-| `--book-card-format-font-size` | `var(--font-label-sm-size)` | 12px label |
+| `--book-card-title-font-family` | `var(--font-family-body)` | Inter title |
+| `--book-card-title-font-size` | `var(--font-size-title-md)` | 16px title |
+| `--book-card-title-line-height` | `var(--line-height-body)` | 150% title |
+| `--book-card-meta-font-family` | `var(--font-family-body)` | Inter author |
+| `--book-card-meta-font-size` | `var(--font-size-body-sm)` | 14px meta |
+| `--book-card-meta-line-height` | `var(--line-height-body)` | 150% author |
+| `--book-card-price-font-family` | `var(--font-family-mono)` | Roboto Mono price |
+| `--book-card-price-font-size` | `var(--font-size-mono-md)` | 14px price |
+| `--book-card-price-line-height` | `var(--line-height-body)` | 150% price |
+| `--book-card-format-font-family` | `var(--font-family-body)` | Inter badge |
+| `--book-card-format-font-size` | `var(--font-size-label-lg)` | 12px Label/Caption |
+| `--book-card-format-font-weight` | `var(--font-weight-regular)` | 400 badge |
+| `--book-card-format-line-height` | `var(--line-height-tight)` | 120% badge |
+| `--book-card-format-letter-spacing` | `var(--letter-spacing-wide)` | 2.5px badge |
 | `--book-card-focus-ring-color` | `var(--sys-primary-container)` | Shared with Button focus |
 
 Exact semantic bindings verified against Figma component variable links at implement time; update this table if MCP export differs.
